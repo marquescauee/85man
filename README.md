@@ -1,3 +1,14 @@
+## For Turso:
+
+### Para rodar migrations:
+npx drizzle-kit generate
+npx drizzle-kit migrate
+
+### Para executar seeder:
+chamar o seeder no arquivo src/index.ts
+npx tsx src/index.ts
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
