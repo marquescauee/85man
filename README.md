@@ -9,6 +9,13 @@ chamar o seeder no arquivo src/index.ts
 npx tsx src/index.ts
 
 
+### Para executar os testes:
+turso dev (deixar rodando)
+npx drizzle-kit generate
+npx drizzle-kit migrate
+npm run test
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
