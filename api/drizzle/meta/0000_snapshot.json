@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "fc19fca1-2f55-461b-be09-ff382be2f9d3",
+  "id": "8a413757-7e0f-43cd-b3c5-646a7b4175b8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "aluno_atividade": {
@@ -428,11 +428,32 @@
           "notNull": false,
           "autoincrement": false
         },
+        "celular": {
+          "name": "celular",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "email": {
           "name": "email",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "genero": {
+          "name": "genero",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dataNascimento": {
+          "name": "dataNascimento",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "rua": {

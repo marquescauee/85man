@@ -1,239 +1,281 @@
 // Classe Usuario
 export class Usuario {
-    id: number;
-    nome: string;
-    telefone: string;
-    email: string;
-    rua: string;
-    numero: string;
-    complemento: string;
-    bairro: string;
-    cidade: string;
-    estado: string;
-    cep: string;
-    pais: string;
+  id: number;
+  nome: string;
+  telefone: string;
+  genero: string;
+  dataNascimento: string;
+  celular: string;
+  email: string;
+  rua: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep: string;
+  pais: string;
 
-    constructor(
-        id: number,
-        nome: string,
-        telefone: string,
-        email: string,
-        rua: string,
-        numero: string,
-        complemento: string,
-        bairro: string,
-        cidade: string,
-        estado: string,
-        cep: string,
-        pais: string
-    ) {
-        this.id = id;
-        this.nome = nome;
-        this.telefone = telefone;
-        this.email = email;
-        this.rua = rua;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.cep = cep;
-        this.pais = pais;
-    }
+  constructor(
+    id: number,
+    nome: string,
+    genero: string,
+    dataNascimento: string,
+    celular: string,
+    telefone: string,
+    email: string,
+    rua: string,
+    numero: string,
+    complemento: string,
+    bairro: string,
+    cidade: string,
+    estado: string,
+    cep: string,
+    pais: string
+  ) {
+    this.id = id;
+    this.nome = nome;
+    this.genero = genero;
+    this.celular = celular;
+    this.dataNascimento = dataNascimento;
+    this.telefone = telefone;
+    this.email = email;
+    this.rua = rua;
+    this.numero = numero;
+    this.complemento = complemento;
+    this.bairro = bairro;
+    this.cidade = cidade;
+    this.estado = estado;
+    this.cep = cep;
+    this.pais = pais;
+  }
 }
 
 // Classe Aluno
 export class Aluno extends Usuario {
-    ativo: boolean;
+  ativo: boolean;
 
-    constructor(
-        id: number,
-        nome: string,
-        telefone: string,
-        email: string,
-        rua: string,
-        numero: string,
-        complemento: string,
-        bairro: string,
-        cidade: string,
-        estado: string,
-        cep: string,
-        pais: string,
-        ativo: boolean
-    ) {
-        super(id, nome, telefone, email, rua, numero, complemento, bairro, cidade, estado, cep, pais);
-        this.ativo = ativo;
-    }
+  constructor(
+    id: number,
+    nome: string,
+    genero: string,
+    dataNascimento: string,
+    celular: string,
+    telefone: string,
+    email: string,
+    rua: string,
+    numero: string,
+    complemento: string,
+    bairro: string,
+    cidade: string,
+    estado: string,
+    cep: string,
+    pais: string,
+    ativo: boolean
+  ) {
+    super(
+      id,
+      nome,
+      genero,
+      dataNascimento,
+      celular,
+      telefone,
+      email,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado,
+      cep,
+      pais
+    );
+    this.ativo = ativo;
+  }
 
-    matricular(): void {
-        // Implementação do método matricular
-    }
+  matricular(): void {
+    // Implementação do método matricular
+  }
 
-    cancelarMatricula(): void {
-        // Implementação do método cancelarMatricula
-    }
+  cancelarMatricula(): void {
+    // Implementação do método cancelarMatricula
+  }
 }
 
 // Classe Professor
 export class Professor extends Usuario {
-    especialidade: string;
+  especialidade: string;
 
-    constructor(
-        id: number,
-        nome: string,
-        telefone: string,
-        email: string,
-        rua: string,
-        numero: string,
-        complemento: string,
-        bairro: string,
-        cidade: string,
-        estado: string,
-        cep: string,
-        pais: string,
-        especialidade: string
-    ) {
-        super(id, nome, telefone, email, rua, numero, complemento, bairro, cidade, estado, cep, pais);
-        this.especialidade = especialidade;
-    }
+  constructor(
+    id: number,
+    nome: string,
+    telefone: string,
+    genero: string,
+    dataNascimento: string,
+    celular: string,
+    email: string,
+    rua: string,
+    numero: string,
+    complemento: string,
+    bairro: string,
+    cidade: string,
+    estado: string,
+    cep: string,
+    pais: string,
+    especialidade: string
+  ) {
+    super(
+      id,
+      nome,
+      telefone,
+      genero,
+      dataNascimento,
+      celular,
+      email,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado,
+      cep,
+      pais
+    );
+    this.especialidade = especialidade;
+  }
 
-    agendarAula(): void {
-        // Implementação do método agendarAula
-    }
+  agendarAula(): void {
+    // Implementação do método agendarAula
+  }
 
-    cancelarAula(): void {
-        // Implementação do método cancelarAula
-    }
+  cancelarAula(): void {
+    // Implementação do método cancelarAula
+  }
 }
 
 // Classe Matricula
 export class Matricula {
-    id: number;
-    dataMatricula: Date;
-    dataCancelamento: Date;
-    alunoId: number;
+  id: number;
+  dataMatricula: Date;
+  dataCancelamento: Date;
+  alunoId: number;
 
-    constructor(
-        id: number,
-        dataMatricula: Date,
-        dataCancelamento: Date,
-        alunoId: number
-    ) {
-        this.id = id;
-        this.dataMatricula = dataMatricula;
-        this.dataCancelamento = dataCancelamento;
-        this.alunoId = alunoId;
-    }
+  constructor(
+    id: number,
+    dataMatricula: Date,
+    dataCancelamento: Date,
+    alunoId: number
+  ) {
+    this.id = id;
+    this.dataMatricula = dataMatricula;
+    this.dataCancelamento = dataCancelamento;
+    this.alunoId = alunoId;
+  }
 
-    registrar(): void {
-        // Implementação do método registrar
-    }
+  registrar(): void {
+    // Implementação do método registrar
+  }
 
-    cancelar(): void {
-        // Implementação do método cancelar
-    }
+  cancelar(): void {
+    // Implementação do método cancelar
+  }
 }
 
 // Classe Atividade
 export class Atividade {
-    id: number;
-    nome: string;
-    descricao: string;
-    horaInicio: Date;
-    horaFim: Date;
+  id: number;
+  nome: string;
+  descricao: string;
+  horaInicio: Date;
+  horaFim: Date;
 
-    constructor(
-        id: number,
-        nome: string,
-        descricao: string,
-        horaInicio: Date,
-        horaFim: Date
-    ) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.horaInicio = horaInicio;
-        this.horaFim = horaFim;
-    }
+  constructor(
+    id: number,
+    nome: string,
+    descricao: string,
+    horaInicio: Date,
+    horaFim: Date
+  ) {
+    this.id = id;
+    this.nome = nome;
+    this.descricao = descricao;
+    this.horaInicio = horaInicio;
+    this.horaFim = horaFim;
+  }
 
-    agendar(): void {
-        // Implementação do método agendar
-    }
+  agendar(): void {
+    // Implementação do método agendar
+  }
 
-    cancelar(): void {
-        // Implementação do método cancelar
-    }
+  cancelar(): void {
+    // Implementação do método cancelar
+  }
 }
 
 // Classe Produto
 export class Produto {
-    id: number;
-    nome: string;
-    preco: number;
-    quantidadeEstoque: number;
+  id: number;
+  nome: string;
+  preco: number;
+  quantidadeEstoque: number;
 
-    constructor(
-        id: number,
-        nome: string,
-        preco: number,
-        quantidadeEstoque: number
-    ) {
-        this.id = id;
-        this.nome = nome;
-        this.preco = preco;
-        this.quantidadeEstoque = quantidadeEstoque;
-    }
+  constructor(
+    id: number,
+    nome: string,
+    preco: number,
+    quantidadeEstoque: number
+  ) {
+    this.id = id;
+    this.nome = nome;
+    this.preco = preco;
+    this.quantidadeEstoque = quantidadeEstoque;
+  }
 
-    vender(): void {
-        // Implementação do método vender
-    }
+  vender(): void {
+    // Implementação do método vender
+  }
 
-    atualizarEstoque(): void {
-        // Implementação do método atualizarEstoque
-    }
+  atualizarEstoque(): void {
+    // Implementação do método atualizarEstoque
+  }
 }
 
 // Classe Equipamento
 export class Equipamento {
-    id: number;
-    nome: string;
-    tipo: string;
-    dataAquisicao: Date;
+  id: number;
+  nome: string;
+  tipo: string;
+  dataAquisicao: Date;
 
-    constructor(
-        id: number,
-        nome: string,
-        tipo: string,
-        dataAquisicao: Date
-    ) {
-        this.id = id;
-        this.nome = nome;
-        this.tipo = tipo;
-        this.dataAquisicao = dataAquisicao;
-    }
+  constructor(id: number, nome: string, tipo: string, dataAquisicao: Date) {
+    this.id = id;
+    this.nome = nome;
+    this.tipo = tipo;
+    this.dataAquisicao = dataAquisicao;
+  }
 
-    registrarManutencao(): void {
-        // Implementação do método registrarManutencao
-    }
+  registrarManutencao(): void {
+    // Implementação do método registrarManutencao
+  }
 
-    atualizarStatus(): void {
-        // Implementação do método atualizarStatus
-    }
+  atualizarStatus(): void {
+    // Implementação do método atualizarStatus
+  }
 }
 
 // Classe Relatorio
 export class Relatorio {
-    id: number;
-    tipo: string;
-    dataGeracao: Date;
+  id: number;
+  tipo: string;
+  dataGeracao: Date;
 
-    constructor(id: number, tipo: string, dataGeracao: Date) {
-        this.id = id;
-        this.tipo = tipo;
-        this.dataGeracao = dataGeracao;
-    }
+  constructor(id: number, tipo: string, dataGeracao: Date) {
+    this.id = id;
+    this.tipo = tipo;
+    this.dataGeracao = dataGeracao;
+  }
 
-    gerarRelatorio(): void {
-        // Implementação do método gerarRelatorio
-    }
+  gerarRelatorio(): void {
+    // Implementação do método gerarRelatorio
+  }
 }
