@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq } from "drizzle-orm";
 import {
   usuarioTable,
   alunoTable,
@@ -9,7 +9,7 @@ import {
   produtoTable,
   equipamentoTable,
   relatorioTable,
-} from '../db/schema';
+} from "../db/schema";
 
 import {
   Usuario,
@@ -20,54 +20,63 @@ import {
   Produto,
   Equipamento,
   Relatorio,
-} from '../entities'; 
-import { LibSQLDatabase } from 'drizzle-orm/libsql/driver-core';
+} from "../entities";
+import { LibSQLDatabase } from "drizzle-orm/libsql/driver-core";
 
 // Repositório para Usuário
 export class UsuarioRepository {
+  private db: LibSQLDatabase;
 
-    private db: LibSQLDatabase
-
-    constructor(db: LibSQLDatabase) {
-      this.db = db;
-    }
+  constructor(db: LibSQLDatabase) {
+    this.db = db;
+  }
 
   // Create
-  async create(usuarioData: typeof usuarioTable.$inferInsert): Promise<Usuario> {
-    const [newUsuarioData] = await this.db.insert(usuarioTable).values(usuarioData).returning();
+  async create(
+    usuarioData: typeof usuarioTable.$inferInsert
+  ): Promise<Usuario> {
+    const [newUsuarioData] = await this.db
+      .insert(usuarioTable)
+      .values(usuarioData)
+      .returning();
     return new Usuario(
       newUsuarioData.id,
       newUsuarioData.nome,
-      newUsuarioData.telefone || '',
+      newUsuarioData.telefone || "",
       newUsuarioData.email,
-      newUsuarioData.rua || '',
-      newUsuarioData.numero || '',
-      newUsuarioData.complemento || '',
-      newUsuarioData.bairro || '',
-      newUsuarioData.cidade || '',
-      newUsuarioData.estado || '',
-      newUsuarioData.cep || '',
-      newUsuarioData.pais || ''
+      newUsuarioData.rua || "",
+      newUsuarioData.numero || "",
+      newUsuarioData.complemento || "",
+      newUsuarioData.bairro || "",
+      newUsuarioData.cidade || "",
+      newUsuarioData.estado || "",
+      newUsuarioData.cep || "",
+      newUsuarioData.pais || ""
     );
   }
 
   // Read by ID
   async getById(id: number): Promise<Usuario | null> {
-    const result = await this.db.select().from(usuarioTable).where(eq(usuarioTable.id, id)).limit(1).then(res => res[0]);
+    const result = await this.db
+      .select()
+      .from(usuarioTable)
+      .where(eq(usuarioTable.id, id))
+      .limit(1)
+      .then((res) => res[0]);
     if (result) {
       return new Usuario(
         result.id,
         result.nome,
-        result.telefone || '',
+        result.telefone || "",
         result.email,
-        result.rua || '',
-        result.numero || '',
-        result.complemento || '',
-        result.bairro || '',
-        result.cidade || '',
-        result.estado || '',
-        result.cep || '',
-        result.pais || ''
+        result.rua || "",
+        result.numero || "",
+        result.complemento || "",
+        result.bairro || "",
+        result.cidade || "",
+        result.estado || "",
+        result.cep || "",
+        result.pais || ""
       );
     }
     return null;
@@ -76,40 +85,53 @@ export class UsuarioRepository {
   // Read All
   async getAll(): Promise<Usuario[]> {
     const results = await this.db.select().from(usuarioTable).all();
-    return results.map(data => new Usuario(
-      data.id,
-      data.nome,
-      data.telefone || '',
-      data.email,
-      data.rua || '',
-      data.numero || '',
-      data.complemento || '',
-      data.bairro || '',
-      data.cidade || '',
-      data.estado || '',
-      data.cep || '',
-      data.pais || ''
-    ));
+    return results.map(
+      (data) =>
+        new Usuario(
+          data.id,
+          data.nome,
+          data.telefone || "",
+          data.email,
+          data.rua || "",
+          data.numero || "",
+          data.complemento || "",
+          data.bairro || "",
+          data.cidade || "",
+          data.estado || "",
+          data.cep || "",
+          data.pais || ""
+        )
+    );
   }
 
   // Update
-  async update(id: number, usuarioData: Partial<typeof usuarioTable.$inferInsert>): Promise<Usuario | null> {
-    await this.db.update(usuarioTable).set(usuarioData).where(eq(usuarioTable.id, id)).run();
+  async update(
+    id: number,
+    usuarioData: Partial<typeof usuarioTable.$inferInsert>
+  ): Promise<Usuario | null> {
+    await this.db
+      .update(usuarioTable)
+      .set(usuarioData)
+      .where(eq(usuarioTable.id, id))
+      .run();
     return this.getById(id);
   }
 
   // Delete
   async delete(id: number): Promise<boolean> {
-    const result = await this.db.delete(usuarioTable).where(eq(usuarioTable.id, id)).run();
+    const result = await this.db
+      .delete(usuarioTable)
+      .where(eq(usuarioTable.id, id))
+      .run();
     return result.rowsAffected > 0;
   }
 }
 
 // Repositório para Aluno
 export class AlunoRepository {
-  private usuarioRepo ;
+  private usuarioRepo;
 
-  private db: LibSQLDatabase
+  private db: LibSQLDatabase;
 
   constructor(db: LibSQLDatabase) {
     this.db = db;
@@ -117,7 +139,9 @@ export class AlunoRepository {
   }
 
   // Create
-  async create(alunoData: typeof alunoTable.$inferInsert & typeof usuarioTable.$inferInsert): Promise<Aluno> {
+  async create(
+    alunoData: typeof alunoTable.$inferInsert & typeof usuarioTable.$inferInsert
+  ): Promise<Aluno> {
     // Cria o usuário primeiro
     const usuario = await this.usuarioRepo.create(alunoData);
 
@@ -126,7 +150,10 @@ export class AlunoRepository {
       usuarioId: usuario.id,
       ativo: alunoData.ativo,
     };
-    const [newAlunoData] = await this.db.insert(alunoTable).values(alunoInsertData).returning();
+    const [newAlunoData] = await this.db
+      .insert(alunoTable)
+      .values(alunoInsertData)
+      .returning();
 
     return new Aluno(
       usuario.id,
@@ -150,7 +177,12 @@ export class AlunoRepository {
     const usuario = await this.usuarioRepo.getById(usuarioId);
     if (!usuario) return null;
 
-    const alunoData = await this.db.select().from(alunoTable).where(eq(alunoTable.usuarioId, usuarioId)).limit(1).then(res => res[0]);
+    const alunoData = await this.db
+      .select()
+      .from(alunoTable)
+      .where(eq(alunoTable.usuarioId, usuarioId))
+      .limit(1)
+      .then((res) => res[0]);
     if (alunoData) {
       return new Aluno(
         usuario.id,
@@ -173,38 +205,54 @@ export class AlunoRepository {
 
   // Read All
   async getAll(): Promise<Aluno[]> {
-    const alunosData = await this.db.select().from(alunoTable).all();
-    const alunos: Aluno[] = [];
-    for (const alunoRow of alunosData) {
-      const usuario = await this.usuarioRepo.getById(alunoRow.usuarioId);
-      if (usuario) {
-        alunos.push(new Aluno(
-          usuario.id,
-          usuario.nome,
-          usuario.telefone,
-          usuario.email,
-          usuario.rua,
-          usuario.numero,
-          usuario.complemento,
-          usuario.bairro,
-          usuario.cidade,
-          usuario.estado,
-          usuario.cep,
-          usuario.pais,
-          alunoRow.ativo === 1 // Converte para booleano
-        ));
+    try {
+      const alunosData = await this.db.select().from(alunoTable).all();
+      const alunos: Aluno[] = [];
+      for (const alunoRow of alunosData) {
+        const usuario = await this.usuarioRepo.getById(alunoRow.usuarioId);
+        if (usuario) {
+          alunos.push(
+            new Aluno(
+              usuario.id,
+              usuario.nome,
+              usuario.telefone,
+              usuario.email,
+              usuario.rua,
+              usuario.numero,
+              usuario.complemento,
+              usuario.bairro,
+              usuario.cidade,
+              usuario.estado,
+              usuario.cep,
+              usuario.pais,
+              alunoRow.ativo === 1 // Converte para booleano
+            )
+          );
+        }
       }
+      return alunos;
+    } catch (e) {
+      console.error(e);
     }
-    return alunos;
+
+    return [];
   }
 
   // Update
-  async update(usuarioId: number, alunoData: Partial<typeof alunoTable.$inferInsert> & Partial<typeof usuarioTable.$inferInsert>): Promise<Aluno | null> {
+  async update(
+    usuarioId: number,
+    alunoData: Partial<typeof alunoTable.$inferInsert> &
+      Partial<typeof usuarioTable.$inferInsert>
+  ): Promise<Aluno | null> {
     // Atualiza o usuário
     await this.usuarioRepo.update(usuarioId, alunoData);
 
     // Atualiza o aluno
-    await this.db.update(alunoTable).set(alunoData).where(eq(alunoTable.usuarioId, usuarioId)).run();
+    await this.db
+      .update(alunoTable)
+      .set(alunoData)
+      .where(eq(alunoTable.usuarioId, usuarioId))
+      .run();
 
     return this.getByUsuarioId(usuarioId);
   }
@@ -212,7 +260,10 @@ export class AlunoRepository {
   // Delete
   async delete(usuarioId: number): Promise<boolean> {
     // Deleta o aluno
-    const deletedAluno = await this.db.delete(alunoTable).where(eq(alunoTable.usuarioId, usuarioId)).run();
+    const deletedAluno = await this.db
+      .delete(alunoTable)
+      .where(eq(alunoTable.usuarioId, usuarioId))
+      .run();
 
     // Deleta o usuário
     const deletedUsuario = await this.usuarioRepo.delete(usuarioId);
@@ -223,17 +274,20 @@ export class AlunoRepository {
 
 // Repositório para Professor
 export class ProfessorRepository {
-    private usuarioRepo ;
+  private usuarioRepo;
 
-    private db: LibSQLDatabase
-  
-    constructor(db: LibSQLDatabase) {
-      this.db = db;
-      this.usuarioRepo = new UsuarioRepository(db);
-    }
+  private db: LibSQLDatabase;
+
+  constructor(db: LibSQLDatabase) {
+    this.db = db;
+    this.usuarioRepo = new UsuarioRepository(db);
+  }
 
   // Create
-  async create(professorData: typeof professorTable.$inferInsert & typeof usuarioTable.$inferInsert): Promise<Professor> {
+  async create(
+    professorData: typeof professorTable.$inferInsert &
+      typeof usuarioTable.$inferInsert
+  ): Promise<Professor> {
     // Cria o usuário primeiro
     const usuario = await this.usuarioRepo.create(professorData);
 
@@ -242,7 +296,10 @@ export class ProfessorRepository {
       usuarioId: usuario.id,
       especialidade: professorData.especialidade,
     };
-    const [newProfessorData] = await this.db.insert(professorTable).values(professorInsertData).returning();
+    const [newProfessorData] = await this.db
+      .insert(professorTable)
+      .values(professorInsertData)
+      .returning();
 
     return new Professor(
       usuario.id,
@@ -266,7 +323,12 @@ export class ProfessorRepository {
     const usuario = await this.usuarioRepo.getById(usuarioId);
     if (!usuario) return null;
 
-    const professorData = await this.db.select().from(professorTable).where(eq(professorTable.usuarioId, usuarioId)).limit(1).then(res => res[0]);
+    const professorData = await this.db
+      .select()
+      .from(professorTable)
+      .where(eq(professorTable.usuarioId, usuarioId))
+      .limit(1)
+      .then((res) => res[0]);
     if (professorData) {
       return new Professor(
         usuario.id,
@@ -294,33 +356,43 @@ export class ProfessorRepository {
     for (const professorRow of professoresData) {
       const usuario = await this.usuarioRepo.getById(professorRow.usuarioId);
       if (usuario) {
-        professores.push(new Professor(
-          usuario.id,
-          usuario.nome,
-          usuario.telefone,
-          usuario.email,
-          usuario.rua,
-          usuario.numero,
-          usuario.complemento,
-          usuario.bairro,
-          usuario.cidade,
-          usuario.estado,
-          usuario.cep,
-          usuario.pais,
-          professorRow.especialidade
-        ));
+        professores.push(
+          new Professor(
+            usuario.id,
+            usuario.nome,
+            usuario.telefone,
+            usuario.email,
+            usuario.rua,
+            usuario.numero,
+            usuario.complemento,
+            usuario.bairro,
+            usuario.cidade,
+            usuario.estado,
+            usuario.cep,
+            usuario.pais,
+            professorRow.especialidade
+          )
+        );
       }
     }
     return professores;
   }
 
   // Update
-  async update(usuarioId: number, professorData: Partial<typeof professorTable.$inferInsert> & Partial<typeof usuarioTable.$inferInsert>): Promise<Professor | null> {
+  async update(
+    usuarioId: number,
+    professorData: Partial<typeof professorTable.$inferInsert> &
+      Partial<typeof usuarioTable.$inferInsert>
+  ): Promise<Professor | null> {
     // Atualiza o usuário
     await this.usuarioRepo.update(usuarioId, professorData);
 
     // Atualiza o professor
-    await this.db.update(professorTable).set(professorData).where(eq(professorTable.usuarioId, usuarioId)).run();
+    await this.db
+      .update(professorTable)
+      .set(professorData)
+      .where(eq(professorTable.usuarioId, usuarioId))
+      .run();
 
     return this.getByUsuarioId(usuarioId);
   }
@@ -328,7 +400,10 @@ export class ProfessorRepository {
   // Delete
   async delete(usuarioId: number): Promise<boolean> {
     // Deleta o professor
-    const deletedProfessor = await this.db.delete(professorTable).where(eq(professorTable.usuarioId, usuarioId)).run();
+    const deletedProfessor = await this.db
+      .delete(professorTable)
+      .where(eq(professorTable.usuarioId, usuarioId))
+      .run();
 
     // Deleta o usuário
     const deletedUsuario = await this.usuarioRepo.delete(usuarioId);
@@ -339,32 +414,45 @@ export class ProfessorRepository {
 
 // Repositório para Matrícula
 export class MatriculaRepository {
-  
-    private db: LibSQLDatabase
+  private db: LibSQLDatabase;
 
-    constructor(db: LibSQLDatabase) {
-      this.db = db;
-    }
-  
-    // Create
-  async create(matriculaData: typeof matriculaTable.$inferInsert): Promise<Matricula> {
-    const [newMatriculaData] = await this.db.insert(matriculaTable).values(matriculaData).returning();
+  constructor(db: LibSQLDatabase) {
+    this.db = db;
+  }
+
+  // Create
+  async create(
+    matriculaData: typeof matriculaTable.$inferInsert
+  ): Promise<Matricula> {
+    const [newMatriculaData] = await this.db
+      .insert(matriculaTable)
+      .values(matriculaData)
+      .returning();
     return new Matricula(
       newMatriculaData.id,
       new Date(newMatriculaData.dataMatricula),
-      newMatriculaData.dataCancelamento ? new Date(newMatriculaData.dataCancelamento) : new Date(),
+      newMatriculaData.dataCancelamento
+        ? new Date(newMatriculaData.dataCancelamento)
+        : new Date(),
       newMatriculaData.alunoId
     );
   }
 
   // Read by ID
   async getById(id: number): Promise<Matricula | null> {
-    const result = await this.db.select().from(matriculaTable).where(eq(matriculaTable.id, id)).limit(1).then(res => res[0]);
+    const result = await this.db
+      .select()
+      .from(matriculaTable)
+      .where(eq(matriculaTable.id, id))
+      .limit(1)
+      .then((res) => res[0]);
     if (result) {
       return new Matricula(
         result.id,
         new Date(result.dataMatricula),
-        result.dataCancelamento ? new Date(result.dataCancelamento) : new Date(),
+        result.dataCancelamento
+          ? new Date(result.dataCancelamento)
+          : new Date(),
         result.alunoId
       );
     }
@@ -374,57 +462,88 @@ export class MatriculaRepository {
   // Read All
   async getAll(): Promise<Matricula[]> {
     const results = await this.db.select().from(matriculaTable).all();
-    return results.map(data => new Matricula(
-      data.id,
-      new Date(data.dataMatricula),
-      data.dataCancelamento ? new Date(data.dataCancelamento) : new Date(),
-      data.alunoId
-    ));
+    return results.map(
+      (data) =>
+        new Matricula(
+          data.id,
+          new Date(data.dataMatricula),
+          data.dataCancelamento ? new Date(data.dataCancelamento) : new Date(),
+          data.alunoId
+        )
+    );
   }
 
   // Update
-  async update(id: number, matriculaData: Partial<typeof matriculaTable.$inferInsert>): Promise<Matricula | null> {
-    await this.db.update(matriculaTable).set(matriculaData).where(eq(matriculaTable.id, id)).run();
+  async update(
+    id: number,
+    matriculaData: Partial<typeof matriculaTable.$inferInsert>
+  ): Promise<Matricula | null> {
+    await this.db
+      .update(matriculaTable)
+      .set(matriculaData)
+      .where(eq(matriculaTable.id, id))
+      .run();
     return this.getById(id);
   }
 
   // Delete
   async delete(id: number): Promise<boolean> {
-    const result = await this.db.delete(matriculaTable).where(eq(matriculaTable.id, id)).run();
+    const result = await this.db
+      .delete(matriculaTable)
+      .where(eq(matriculaTable.id, id))
+      .run();
     return result.rowsAffected > 0;
   }
 }
 
 // Repositório para Atividade
 export class AtividadeRepository {
-    private db: LibSQLDatabase
+  private db: LibSQLDatabase;
 
-    constructor(db: LibSQLDatabase) {
-      this.db = db;
-    }
-  
-    // Create
-  async create(atividadeData: typeof atividadeTable.$inferInsert): Promise<Atividade> {
-    const [newAtividadeData] = await this.db.insert(atividadeTable).values(atividadeData).returning();
+  constructor(db: LibSQLDatabase) {
+    this.db = db;
+  }
+
+  // Create
+  async create(
+    atividadeData: typeof atividadeTable.$inferInsert
+  ): Promise<Atividade> {
+    const [newAtividadeData] = await this.db
+      .insert(atividadeTable)
+      .values(atividadeData)
+      .returning();
     return new Atividade(
       newAtividadeData.id,
       newAtividadeData.nome,
       newAtividadeData.descricao ?? "",
-      newAtividadeData.horaInicio ? new Date(`1970-01-01T${newAtividadeData.horaInicio}:00Z`) : new Date(),
-      newAtividadeData.horaFim ? new Date(`1970-01-01T${newAtividadeData.horaFim}:00Z`) : new Date()
+      newAtividadeData.horaInicio
+        ? new Date(`1970-01-01T${newAtividadeData.horaInicio}:00Z`)
+        : new Date(),
+      newAtividadeData.horaFim
+        ? new Date(`1970-01-01T${newAtividadeData.horaFim}:00Z`)
+        : new Date()
     );
   }
 
   // Read by ID
   async getById(id: number): Promise<Atividade | null> {
-    const result = await this.db.select().from(atividadeTable).where(eq(atividadeTable.id, id)).limit(1).then(res => res[0]);
+    const result = await this.db
+      .select()
+      .from(atividadeTable)
+      .where(eq(atividadeTable.id, id))
+      .limit(1)
+      .then((res) => res[0]);
     if (result) {
       return new Atividade(
         result.id,
         result.nome,
         result.descricao ?? "",
-        result.horaInicio ? new Date(`1970-01-01T${result.horaInicio}:00Z`) : new Date(),
-        result.horaFim ? new Date(`1970-01-01T${result.horaFim}:00Z`) : new Date()
+        result.horaInicio
+          ? new Date(`1970-01-01T${result.horaInicio}:00Z`)
+          : new Date(),
+        result.horaFim
+          ? new Date(`1970-01-01T${result.horaFim}:00Z`)
+          : new Date()
       );
     }
     return null;
@@ -433,24 +552,39 @@ export class AtividadeRepository {
   // Read All
   async getAll(): Promise<Atividade[]> {
     const results = await this.db.select().from(atividadeTable).all();
-    return results.map(data => new Atividade(
-      data.id,
-      data.nome,
-      data.descricao ?? "",
-      data.horaInicio ? new Date(`1970-01-01T${data.horaInicio}:00Z`) : new Date(),
-      data.horaFim ? new Date(`1970-01-01T${data.horaFim}:00Z`) : new Date()
-    ));
+    return results.map(
+      (data) =>
+        new Atividade(
+          data.id,
+          data.nome,
+          data.descricao ?? "",
+          data.horaInicio
+            ? new Date(`1970-01-01T${data.horaInicio}:00Z`)
+            : new Date(),
+          data.horaFim ? new Date(`1970-01-01T${data.horaFim}:00Z`) : new Date()
+        )
+    );
   }
 
   // Update
-  async update(id: number, atividadeData: Partial<typeof atividadeTable.$inferInsert>): Promise<Atividade | null> {
-    await this.db.update(atividadeTable).set(atividadeData).where(eq(atividadeTable.id, id)).run();
+  async update(
+    id: number,
+    atividadeData: Partial<typeof atividadeTable.$inferInsert>
+  ): Promise<Atividade | null> {
+    await this.db
+      .update(atividadeTable)
+      .set(atividadeData)
+      .where(eq(atividadeTable.id, id))
+      .run();
     return this.getById(id);
   }
 
   // Delete
   async delete(id: number): Promise<boolean> {
-    const result = await this.db.delete(atividadeTable).where(eq(atividadeTable.id, id)).run();
+    const result = await this.db
+      .delete(atividadeTable)
+      .where(eq(atividadeTable.id, id))
+      .run();
     return result.rowsAffected > 0;
   }
 }
@@ -508,15 +642,20 @@ export class AtividadeRepository {
 
 // Repositório para Produto
 export class ProdutoRepository {
-    private db: LibSQLDatabase
+  private db: LibSQLDatabase;
 
-    constructor(db: LibSQLDatabase) {
-      this.db = db;
-    }
-  
-    // Create
-  async create(produtoData: typeof produtoTable.$inferInsert): Promise<Produto> {
-    const [newProdutoData] = await this.db.insert(produtoTable).values(produtoData).returning();
+  constructor(db: LibSQLDatabase) {
+    this.db = db;
+  }
+
+  // Create
+  async create(
+    produtoData: typeof produtoTable.$inferInsert
+  ): Promise<Produto> {
+    const [newProdutoData] = await this.db
+      .insert(produtoTable)
+      .values(produtoData)
+      .returning();
     return new Produto(
       newProdutoData.id,
       newProdutoData.nome,
@@ -527,7 +666,12 @@ export class ProdutoRepository {
 
   // Read by ID
   async getById(id: number): Promise<Produto | null> {
-    const result = await this.db.select().from(produtoTable).where(eq(produtoTable.id, id)).limit(1).then(res => res[0]);
+    const result = await this.db
+      .select()
+      .from(produtoTable)
+      .where(eq(produtoTable.id, id))
+      .limit(1)
+      .then((res) => res[0]);
     if (result) {
       return new Produto(
         result.id,
@@ -542,54 +686,74 @@ export class ProdutoRepository {
   // Read All
   async getAll(): Promise<Produto[]> {
     const results = await this.db.select().from(produtoTable).all();
-    return results.map(data => new Produto(
-      data.id,
-      data.nome,
-      data.preco,
-      data.quantidadeEstoque
-    ));
+    return results.map(
+      (data) =>
+        new Produto(data.id, data.nome, data.preco, data.quantidadeEstoque)
+    );
   }
 
   // Update
-  async update(id: number, produtoData: Partial<typeof produtoTable.$inferInsert>): Promise<Produto | null> {
-    await this.db.update(produtoTable).set(produtoData).where(eq(produtoTable.id, id)).run();
+  async update(
+    id: number,
+    produtoData: Partial<typeof produtoTable.$inferInsert>
+  ): Promise<Produto | null> {
+    await this.db
+      .update(produtoTable)
+      .set(produtoData)
+      .where(eq(produtoTable.id, id))
+      .run();
     return this.getById(id);
   }
 
   // Delete
   async delete(id: number): Promise<boolean> {
-    const result = await this.db.delete(produtoTable).where(eq(produtoTable.id, id)).run();
+    const result = await this.db
+      .delete(produtoTable)
+      .where(eq(produtoTable.id, id))
+      .run();
     return result.rowsAffected > 0;
   }
 }
 
 // Repositório para Equipamento
 export class EquipamentoRepository {
-    private db: LibSQLDatabase
+  private db: LibSQLDatabase;
 
-    constructor(db: LibSQLDatabase) {
-      this.db = db;
-    }
-  
-    // Create
-  async create(equipamentoData: typeof equipamentoTable.$inferInsert): Promise<Equipamento> {
-    const [newEquipamentoData] = await this.db.insert(equipamentoTable).values(equipamentoData).returning();
+  constructor(db: LibSQLDatabase) {
+    this.db = db;
+  }
+
+  // Create
+  async create(
+    equipamentoData: typeof equipamentoTable.$inferInsert
+  ): Promise<Equipamento> {
+    const [newEquipamentoData] = await this.db
+      .insert(equipamentoTable)
+      .values(equipamentoData)
+      .returning();
     return new Equipamento(
       newEquipamentoData.id,
       newEquipamentoData.nome,
-      newEquipamentoData.tipo || '',
-      newEquipamentoData.dataAquisicao ? new Date(equipamentoData.dataAquisicao as string) : new Date()
+      newEquipamentoData.tipo || "",
+      newEquipamentoData.dataAquisicao
+        ? new Date(equipamentoData.dataAquisicao as string)
+        : new Date()
     );
   }
 
   // Read by ID
   async getById(id: number): Promise<Equipamento | null> {
-    const result = await this.db.select().from(equipamentoTable).where(eq(equipamentoTable.id, id)).limit(1).then(res => res[0]);
+    const result = await this.db
+      .select()
+      .from(equipamentoTable)
+      .where(eq(equipamentoTable.id, id))
+      .limit(1)
+      .then((res) => res[0]);
     if (result) {
       return new Equipamento(
         result.id,
         result.nome,
-        result.tipo || '',
+        result.tipo || "",
         result.dataAquisicao ? new Date(result.dataAquisicao) : new Date()
       );
     }
@@ -599,53 +763,77 @@ export class EquipamentoRepository {
   // Read All
   async getAll(): Promise<Equipamento[]> {
     const results = await this.db.select().from(equipamentoTable).all();
-    return results.map(data => new Equipamento(
-      data.id,
-      data.nome,
-      data.tipo || '',
-      data.dataAquisicao ? new Date(data.dataAquisicao) : new Date()
-    ));
+    return results.map(
+      (data) =>
+        new Equipamento(
+          data.id,
+          data.nome,
+          data.tipo || "",
+          data.dataAquisicao ? new Date(data.dataAquisicao) : new Date()
+        )
+    );
   }
 
   // Update
-  async update(id: number, equipamentoData: Partial<typeof equipamentoTable.$inferInsert>): Promise<Equipamento | null> {
-    await this.db.update(equipamentoTable).set(equipamentoData).where(eq(equipamentoTable.id, id)).run();
+  async update(
+    id: number,
+    equipamentoData: Partial<typeof equipamentoTable.$inferInsert>
+  ): Promise<Equipamento | null> {
+    await this.db
+      .update(equipamentoTable)
+      .set(equipamentoData)
+      .where(eq(equipamentoTable.id, id))
+      .run();
     return this.getById(id);
   }
 
   // Delete
   async delete(id: number): Promise<boolean> {
-    const result = await this.db.delete(equipamentoTable).where(eq(equipamentoTable.id, id)).run();
+    const result = await this.db
+      .delete(equipamentoTable)
+      .where(eq(equipamentoTable.id, id))
+      .run();
     return result.rowsAffected > 0;
   }
 }
 
 // Repositório para Relatório
 export class RelatorioRepository {
-  
-    private db: LibSQLDatabase
+  private db: LibSQLDatabase;
 
-    constructor(db: LibSQLDatabase) {
-      this.db = db;
-    }
-  
-    // Create
-  async create(relatorioData: typeof relatorioTable.$inferInsert): Promise<Relatorio> {
-    const [newRelatorioData] = await this.db.insert(relatorioTable).values(relatorioData).returning();
+  constructor(db: LibSQLDatabase) {
+    this.db = db;
+  }
+
+  // Create
+  async create(
+    relatorioData: typeof relatorioTable.$inferInsert
+  ): Promise<Relatorio> {
+    const [newRelatorioData] = await this.db
+      .insert(relatorioTable)
+      .values(relatorioData)
+      .returning();
     return new Relatorio(
       newRelatorioData.id,
-      newRelatorioData.tipo || '',
-      newRelatorioData.dataGeracao ? new Date(relatorioData.dataGeracao as string) : new Date()
+      newRelatorioData.tipo || "",
+      newRelatorioData.dataGeracao
+        ? new Date(relatorioData.dataGeracao as string)
+        : new Date()
     );
   }
 
   // Read by ID
   async getById(id: number): Promise<Relatorio | null> {
-    const result = await this.db.select().from(relatorioTable).where(eq(relatorioTable.id, id)).limit(1).then(res => res[0]);
+    const result = await this.db
+      .select()
+      .from(relatorioTable)
+      .where(eq(relatorioTable.id, id))
+      .limit(1)
+      .then((res) => res[0]);
     if (result) {
       return new Relatorio(
         result.id,
-        result.tipo || '',
+        result.tipo || "",
         result.dataGeracao ? new Date(result.dataGeracao) : new Date()
       );
     }
@@ -655,28 +843,40 @@ export class RelatorioRepository {
   // Read All
   async getAll(): Promise<Relatorio[]> {
     const results = await this.db.select().from(relatorioTable).all();
-    return results.map(data => new Relatorio(
-      data.id,
-      data.tipo || '',
-      data.dataGeracao ? new Date(data.dataGeracao) : new Date()
-    ));
+    return results.map(
+      (data) =>
+        new Relatorio(
+          data.id,
+          data.tipo || "",
+          data.dataGeracao ? new Date(data.dataGeracao) : new Date()
+        )
+    );
   }
 
   // Update
-  async update(id: number, relatorioData: Partial<typeof relatorioTable.$inferInsert>): Promise<Relatorio | null> {
-    await this.db.update(relatorioTable).set(relatorioData).where(eq(relatorioTable.id, id)).run();
+  async update(
+    id: number,
+    relatorioData: Partial<typeof relatorioTable.$inferInsert>
+  ): Promise<Relatorio | null> {
+    await this.db
+      .update(relatorioTable)
+      .set(relatorioData)
+      .where(eq(relatorioTable.id, id))
+      .run();
     return this.getById(id);
   }
 
   // Delete
   async delete(id: number): Promise<boolean> {
-    const result = await this.db.delete(relatorioTable).where(eq(relatorioTable.id, id)).run();
+    const result = await this.db
+      .delete(relatorioTable)
+      .where(eq(relatorioTable.id, id))
+      .run();
     return result.rowsAffected > 0;
   }
 }
 
-import { db } from '../index';
-
+import { db } from "../index";
 
 export const usuarioRepository = new UsuarioRepository(db);
 export const alunoRepository = new AlunoRepository(db);

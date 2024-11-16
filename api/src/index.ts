@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import {
   usuarioRepository,
@@ -14,11 +15,11 @@ import { drizzle } from "drizzle-orm/libsql/web";
 
 dotenv.config();
 
-export const db = drizzle({ 
-  connection: { 
-    url: process.env.TURSO_DATABASE_URL!, 
-    authToken: process.env.TURSO_AUTH_TOKEN!
-  }
+export const db = drizzle({
+  connection: {
+    url: process.env.TURSO_DATABASE_URL!,
+    authToken: process.env.TURSO_AUTH_TOKEN!,
+  },
 });
 
 dotenv.config();
@@ -28,6 +29,8 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware para parsear JSON
 app.use(express.json());
+
+app.use(cors());
 
 // ----------------------
 // Rotas CRUD para Usuários
@@ -69,7 +72,9 @@ app.put("/usuarios/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const usuarioAtualizado = await usuarioRepository.update(id, req.body);
     if (!usuarioAtualizado) {
-      return res.status(404).json({ message: "Usuário não encontrado para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Usuário não encontrado para atualização" });
     }
     res.status(200).json(usuarioAtualizado);
   } catch (error) {
@@ -82,7 +87,9 @@ app.delete("/usuarios/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await usuarioRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Usuário não encontrado para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Usuário não encontrado para deleção" });
     }
     res.status(200).json({ message: "Usuário deletado com sucesso" });
   } catch (error) {
@@ -130,7 +137,9 @@ app.put("/alunos/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const alunoAtualizado = await alunoRepository.update(id, req.body);
     if (!alunoAtualizado) {
-      return res.status(404).json({ message: "Aluno não encontrado para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Aluno não encontrado para atualização" });
     }
     res.status(200).json(alunoAtualizado);
   } catch (error) {
@@ -143,7 +152,9 @@ app.delete("/alunos/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await alunoRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Aluno não encontrado para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Aluno não encontrado para deleção" });
     }
     res.status(200).json({ message: "Aluno deletado com sucesso" });
   } catch (error) {
@@ -191,7 +202,9 @@ app.put("/professores/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const professorAtualizado = await professorRepository.update(id, req.body);
     if (!professorAtualizado) {
-      return res.status(404).json({ message: "Professor não encontrado para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Professor não encontrado para atualização" });
     }
     res.status(200).json(professorAtualizado);
   } catch (error) {
@@ -204,7 +217,9 @@ app.delete("/professores/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await professorRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Professor não encontrado para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Professor não encontrado para deleção" });
     }
     res.status(200).json({ message: "Professor deletado com sucesso" });
   } catch (error) {
@@ -252,7 +267,9 @@ app.put("/produtos/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const produtoAtualizado = await produtoRepository.update(id, req.body);
     if (!produtoAtualizado) {
-      return res.status(404).json({ message: "Produto não encontrado para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Produto não encontrado para atualização" });
     }
     res.status(200).json(produtoAtualizado);
   } catch (error) {
@@ -265,7 +282,9 @@ app.delete("/produtos/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await produtoRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Produto não encontrado para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Produto não encontrado para deleção" });
     }
     res.status(200).json({ message: "Produto deletado com sucesso" });
   } catch (error) {
@@ -311,9 +330,14 @@ app.get("/equipamentos/:id", async (req: Request, res: Response) => {
 app.put("/equipamentos/:id", async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
-    const equipamentoAtualizado = await equipamentoRepository.update(id, req.body);
+    const equipamentoAtualizado = await equipamentoRepository.update(
+      id,
+      req.body
+    );
     if (!equipamentoAtualizado) {
-      return res.status(404).json({ message: "Equipamento não encontrado para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Equipamento não encontrado para atualização" });
     }
     res.status(200).json(equipamentoAtualizado);
   } catch (error) {
@@ -326,7 +350,9 @@ app.delete("/equipamentos/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await equipamentoRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Equipamento não encontrado para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Equipamento não encontrado para deleção" });
     }
     res.status(200).json({ message: "Equipamento deletado com sucesso" });
   } catch (error) {
@@ -374,7 +400,9 @@ app.put("/relatorios/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const relatorioAtualizado = await relatorioRepository.update(id, req.body);
     if (!relatorioAtualizado) {
-      return res.status(404).json({ message: "Relatório não encontrado para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Relatório não encontrado para atualização" });
     }
     res.status(200).json(relatorioAtualizado);
   } catch (error) {
@@ -387,7 +415,9 @@ app.delete("/relatorios/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await relatorioRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Relatório não encontrado para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Relatório não encontrado para deleção" });
     }
     res.status(200).json({ message: "Relatório deletado com sucesso" });
   } catch (error) {
@@ -435,7 +465,9 @@ app.put("/matriculas/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const matriculaAtualizada = await matriculaRepository.update(id, req.body);
     if (!matriculaAtualizada) {
-      return res.status(404).json({ message: "Matrícula não encontrada para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Matrícula não encontrada para atualização" });
     }
     res.status(200).json(matriculaAtualizada);
   } catch (error) {
@@ -448,7 +480,9 @@ app.delete("/matriculas/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await matriculaRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Matrícula não encontrada para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Matrícula não encontrada para deleção" });
     }
     res.status(200).json({ message: "Matrícula deletada com sucesso" });
   } catch (error) {
@@ -496,7 +530,9 @@ app.put("/atividades/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const atividadeAtualizada = await atividadeRepository.update(id, req.body);
     if (!atividadeAtualizada) {
-      return res.status(404).json({ message: "Atividade não encontrada para atualização" });
+      return res
+        .status(404)
+        .json({ message: "Atividade não encontrada para atualização" });
     }
     res.status(200).json(atividadeAtualizada);
   } catch (error) {
@@ -509,7 +545,9 @@ app.delete("/atividades/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const foiDeletado = await atividadeRepository.delete(id);
     if (!foiDeletado) {
-      return res.status(404).json({ message: "Atividade não encontrada para deleção" });
+      return res
+        .status(404)
+        .json({ message: "Atividade não encontrada para deleção" });
     }
     res.status(200).json({ message: "Atividade deletada com sucesso" });
   } catch (error) {
