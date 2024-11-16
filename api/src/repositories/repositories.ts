@@ -675,15 +675,15 @@ export class RelatorioRepository {
   }
 }
 
-// /**
-//  * Instâncias dos Repositórios
-//  */
-// export const usuarioRepository = new UsuarioRepository();
-// export const alunoRepository = new AlunoRepository();
-// export const professorRepository = new ProfessorRepository();
-// export const matriculaRepository = new MatriculaRepository();
-// export const atividadeRepository = new AtividadeRepository();
-// // export const alunoAtividadeRepository = new AlunoAtividadeRepository();
-// export const produtoRepository = new ProdutoRepository();
-// export const equipamentoRepository = new EquipamentoRepository();
-// export const relatorioRepository = new RelatorioRepository();
+import { db } from '../index';
+
+
+export const usuarioRepository = new UsuarioRepository(db);
+export const alunoRepository = new AlunoRepository(db);
+export const professorRepository = new ProfessorRepository(db);
+export const matriculaRepository = new MatriculaRepository(db);
+export const atividadeRepository = new AtividadeRepository(db);
+// export const alunoAtividadeRepository = new AlunoAtividadeRepository();
+export const produtoRepository = new ProdutoRepository(db);
+export const equipamentoRepository = new EquipamentoRepository(db);
+export const relatorioRepository = new RelatorioRepository(db);
