@@ -1,25 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import "./Users.css";
+import { AlunoInsert, UsuarioInsert } from "../../../../api/src/types";
+
+interface Aluno {
+  id: string;
+  nome: string;
+  dataNascimento: string;
+  genero: string;
+  telefone: string;
+  celular: string;
+  cidade: string;
+  uf: string;
+  cep: string;
+  rua: string;
+  numero: string;
+  bairro: string;
+}
 
 const Users = () => {
-  const [alunos, setAlunos] = useState<any[]>([]);
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAluno, setSelectedAluno] = useState<any>(null);
   const [newAluno, setNewAluno] = useState({
-    id: "",
+    id: 0,
     nome: "",
+    email: "",
     dataNascimento: "",
     genero: "",
     telefone: "",
     celular: "",
     cidade: "",
-    uf: "",
+    estado: "",
     cep: "",
     rua: "",
     numero: "",
     bairro: "",
-  });
+  } as UsuarioInsert);
 
   const formatDateForInput = (date: string) => {
     if (!date) return "";
@@ -46,20 +63,35 @@ const Users = () => {
   };
 
   // Função para adicionar novo aluno
-  const handleAddAluno = () => {
-    setAlunos((prev) => [
-      ...prev,
-      { ...newAluno }, // Cria o novo aluno com todos os dados
-    ]);
+  const handleAddAluno = async () => {
+    const aluno: AlunoInsert = {
+      ativo: 1,
+    };
+
+    const usuario: UsuarioInsert = newAluno;
+
+    const response = await fetch("http://localhost:3000/alunos", {
+      method: "POST",
+      body: JSON.stringify({
+        aluno,
+        usuario,
+      }),
+    });
+
+    console.log(await response.json());
+
+    // setAlunos((prev) => [...prev, { ...newAluno }]);
+
     setNewAluno({
-      id: "",
+      id: 0,
       nome: "",
+      email: "",
       dataNascimento: "",
       genero: "",
       telefone: "",
       celular: "",
       cidade: "",
-      uf: "",
+      estado: "",
       cep: "",
       rua: "",
       numero: "",
@@ -84,9 +116,22 @@ const Users = () => {
   };
 
   useEffect(() => {
-    const alunos = fetch("http://localhost:3000/alunos");
+    const handleAlunos = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/alunos");
 
-    alunos.then((res) => console.log(res.body));
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar alunos: ${response.statusText}`);
+        }
+
+        const alunos: Aluno[] = await response.json();
+        setAlunos(alunos);
+      } catch (error) {
+        console.error("Erro ao buscar alunos:", error);
+      }
+    };
+
+    handleAlunos();
   }, []);
 
   return (
@@ -134,7 +179,9 @@ const Users = () => {
               type="text"
               placeholder="Digite a matrícula"
               value={newAluno.id}
-              onChange={(e) => setNewAluno({ ...newAluno, id: e.target.value })}
+              onChange={(e) =>
+                setNewAluno({ ...newAluno, id: Number(e.target.value) })
+              }
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formNome">
@@ -154,7 +201,7 @@ const Users = () => {
               <Form.Label>Data de Nascimento</Form.Label>
               <Form.Control
                 type="date"
-                value={formatDateForInput(newAluno.dataNascimento)}
+                value={formatDateForInput(newAluno.dataNascimento!)}
                 onChange={(e) =>
                   setNewAluno({
                     ...newAluno,
@@ -168,7 +215,7 @@ const Users = () => {
               <Form.Label>Gênero</Form.Label>
               <Form.Control
                 as="select"
-                value={newAluno.genero}
+                value={newAluno.genero!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, genero: e.target.value })
                 }
@@ -186,7 +233,7 @@ const Users = () => {
               <Form.Control
                 type="text"
                 placeholder="Digite o telefone"
-                value={newAluno.telefone}
+                value={newAluno.telefone!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, telefone: e.target.value })
                 }
@@ -197,7 +244,7 @@ const Users = () => {
               <Form.Control
                 type="text"
                 placeholder="Digite o celular"
-                value={newAluno.celular}
+                value={newAluno.celular!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, celular: e.target.value })
                 }
@@ -211,7 +258,7 @@ const Users = () => {
               <Form.Control
                 type="text"
                 placeholder="Digite a cidade"
-                value={newAluno.cidade}
+                value={newAluno.cidade!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, cidade: e.target.value })
                 }
@@ -222,9 +269,9 @@ const Users = () => {
               <Form.Control
                 type="text"
                 placeholder="Digite o UF"
-                value={newAluno.uf}
+                value={newAluno.estado!}
                 onChange={(e) =>
-                  setNewAluno({ ...newAluno, uf: e.target.value })
+                  setNewAluno({ ...newAluno, estado: e.target.value })
                 }
               />
             </Form.Group>
@@ -233,7 +280,7 @@ const Users = () => {
               <Form.Control
                 type="text"
                 placeholder="Digite o CEP"
-                value={newAluno.cep}
+                value={newAluno.cep!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, cep: e.target.value })
                 }
@@ -251,7 +298,7 @@ const Users = () => {
               <Form.Control
                 type="text"
                 placeholder="Digite a rua"
-                value={newAluno.rua}
+                value={newAluno.rua!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, rua: e.target.value })
                 }
@@ -265,7 +312,7 @@ const Users = () => {
               <Form.Label>Número</Form.Label>
               <Form.Control
                 type="text"
-                value={newAluno.numero}
+                value={newAluno.numero!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, numero: e.target.value })
                 }
@@ -280,7 +327,7 @@ const Users = () => {
               <Form.Control
                 type="text"
                 placeholder="Digite o bairro"
-                value={newAluno.bairro}
+                value={newAluno.bairro!}
                 onChange={(e) =>
                   setNewAluno({ ...newAluno, bairro: e.target.value })
                 }
@@ -299,14 +346,15 @@ const Users = () => {
               variant="outline-light"
               onClick={() =>
                 setNewAluno({
-                  id: "",
+                  id: 0,
                   nome: "",
+                  email: "",
                   dataNascimento: "",
                   genero: "",
                   telefone: "",
                   celular: "",
                   cidade: "",
-                  uf: "",
+                  estado: "",
                   cep: "",
                   rua: "",
                   numero: "",
