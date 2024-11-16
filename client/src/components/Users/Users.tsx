@@ -1,42 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import "./Users.css";
 
 const Users = () => {
-  const [alunos, setAlunos] = useState<any[]>([
-    {
-      matricula: "123",
-      nome: "João Silva",
-      dataNascimento: "03/02/2001",
-      genero: "Masculino",
-      telefone: "1234-5678",
-      celular: "98765-4321",
-      cidade: "São Paulo",
-      uf: "SP",
-      cep: "12345-678",
-      rua: "Rua A",
-      numero: "123",
-      bairro: "Centro",
-    },
-    {
-      matricula: "124",
-      nome: "Maria Souza",
-      dataNascimento: "03/02/2001",
-      genero: "Feminino",
-      telefone: "2345-6789",
-      celular: "98765-4322",
-      cidade: "Rio de Janeiro",
-      uf: "RJ",
-      cep: "23456-789",
-      rua: "Rua B",
-      numero: "456",
-      bairro: "Zona Sul",
-    },
-  ]);
+  const [alunos, setAlunos] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAluno, setSelectedAluno] = useState<any>(null);
   const [newAluno, setNewAluno] = useState({
-    matricula: "",
+    id: "",
     nome: "",
     dataNascimento: "",
     genero: "",
@@ -81,7 +52,7 @@ const Users = () => {
       { ...newAluno }, // Cria o novo aluno com todos os dados
     ]);
     setNewAluno({
-      matricula: "",
+      id: "",
       nome: "",
       dataNascimento: "",
       genero: "",
@@ -100,9 +71,7 @@ const Users = () => {
   const handleEditAluno = () => {
     setAlunos((prev) =>
       prev.map((aluno) =>
-        aluno.matricula === selectedAluno.matricula
-          ? { ...selectedAluno }
-          : aluno
+        aluno.id === selectedAluno.id ? { ...selectedAluno } : aluno
       )
     );
     handleCloseModal();
@@ -110,11 +79,15 @@ const Users = () => {
 
   // Função para remover um aluno
   const handleRemoveAluno = () => {
-    setAlunos((prev) =>
-      prev.filter((aluno) => aluno.matricula !== selectedAluno.matricula)
-    );
+    setAlunos((prev) => prev.filter((aluno) => aluno.id !== selectedAluno.id));
     handleCloseModal();
   };
+
+  useEffect(() => {
+    const alunos = fetch("http://localhost:3000/alunos");
+
+    alunos.then((res) => console.log(res.body));
+  }, []);
 
   return (
     <div style={{ display: "flex", gap: "2rem" }}>
@@ -131,8 +104,8 @@ const Users = () => {
           </thead>
           <tbody>
             {alunos.map((aluno) => (
-              <tr key={aluno.matricula}>
-                <td>{aluno.matricula}</td>
+              <tr key={aluno.id}>
+                <td>{aluno.id}</td>
                 <td>{aluno.nome}</td>
                 <td>
                   <Button
@@ -160,10 +133,8 @@ const Users = () => {
             <Form.Control
               type="text"
               placeholder="Digite a matrícula"
-              value={newAluno.matricula}
-              onChange={(e) =>
-                setNewAluno({ ...newAluno, matricula: e.target.value })
-              }
+              value={newAluno.id}
+              onChange={(e) => setNewAluno({ ...newAluno, id: e.target.value })}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formNome">
@@ -328,7 +299,7 @@ const Users = () => {
               variant="outline-light"
               onClick={() =>
                 setNewAluno({
-                  matricula: "",
+                  id: "",
                   nome: "",
                   dataNascimento: "",
                   genero: "",
@@ -370,11 +341,11 @@ const Users = () => {
               <Form.Label>Código de Matrícula</Form.Label>
               <Form.Control
                 type="text"
-                value={selectedAluno?.matricula || ""}
+                value={selectedAluno?.id || ""}
                 onChange={(e) =>
                   setSelectedAluno({
                     ...selectedAluno,
-                    matricula: e.target.value,
+                    id: e.target.value,
                   })
                 }
               />
