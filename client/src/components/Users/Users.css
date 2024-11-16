@@ -1,0 +1,19 @@
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 8rem 0 0px;
+}
+
+.form-register-container .form-row>div {
+  min-width: 216px;
+}
+
+.form-row-address {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.modal-header .btn-close {
+  filter: invert(100);
+}
