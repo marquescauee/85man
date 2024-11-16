@@ -103,7 +103,9 @@ app.delete("/usuarios/:id", async (req: Request, res: Response) => {
 
 app.post("/alunos", async (req: Request, res: Response) => {
   try {
-    const aluno = await alunoRepository.create(req.body);
+    console.log(req.body);
+    const alunoData = req.body;
+    const aluno = await alunoRepository.create(alunoData);
     res.status(201).json(aluno);
   } catch (error) {
     res.status(500).json({ message: "Erro ao criar aluno", error });
