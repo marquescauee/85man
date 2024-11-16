@@ -1,5 +1,5 @@
 // Importações necessárias
-import {db} from '../../index';
+import {db} from '../index';
 import {
   usuarioTable,
   alunoTable,
