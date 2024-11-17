@@ -11,7 +11,7 @@ interface Aluno {
   telefone: string;
   celular: string;
   cidade: string;
-  uf: string;
+  estado: string;
   cep: string;
   rua: string;
   numero: string;
@@ -501,27 +501,21 @@ const Users = () => {
               <Form.Group
                 className="mb-3"
                 style={{ minWidth: "100px" }}
-                controlId="formGenero"
+                controlId="formAtivo"
               >
                 <Form.Label>Ativo</Form.Label>
                 <Form.Control
                   as="select"
-                  value={
-                    selectedAluno?.ativo
-                      ? selectedAluno?.ativo === 1
-                        ? "Ativo"
-                        : "Inativo"
-                      : ""
-                  }
+                  value={selectedAluno?.ativo ? "Ativo" : "Inativo"} // Mapeia boolean para texto
                   onChange={(e) =>
                     setSelectedAluno({
                       ...selectedAluno,
-                      ativo: e.target.value === "Ativo" ? 1 : 0,
+                      ativo: e.target.value === "Ativo", // Converte texto para boolean
                     })
                   }
                 >
-                  <option value="Masculino">Ativo</option>
-                  <option value="Feminino">Inativo</option>
+                  <option value="Ativo">Ativo</option>
+                  <option value="Inativo">Inativo</option>
                 </Form.Control>
               </Form.Group>
             </div>
@@ -573,9 +567,12 @@ const Users = () => {
                 <Form.Label>UF</Form.Label>
                 <Form.Control
                   type="text"
-                  value={selectedAluno?.uf || ""}
+                  value={selectedAluno?.estado || ""}
                   onChange={(e) =>
-                    setSelectedAluno({ ...selectedAluno, uf: e.target.value })
+                    setSelectedAluno({
+                      ...selectedAluno,
+                      estado: e.target.value,
+                    })
                   }
                 />
               </Form.Group>
