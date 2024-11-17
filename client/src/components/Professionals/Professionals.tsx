@@ -92,8 +92,11 @@ const Users = () => {
 
         setProfessores((prev) => [...prev, { ...newUser }]);
 
+        const maxId = Math.floor(100000 + Math.random() * 900000);
+        
+
         setNewProfessor({
-            id: 0,
+            id: maxId,
             nome: "",
             especialidade: "",
             telefone: "",
@@ -179,11 +182,8 @@ const Users = () => {
                 const professores: any[] = await response.json();
                 setProfessores(professores);
 
-                const maxId = professores.reduce(
-                    (max, professor) => Math.max(max, Number(professor.id)),
-                    0
-                );
-                setNewProfessor((prevProfessor) => ({ ...prevProfessor, id: maxId + 1 }));
+                const maxId = Math.floor(100000 + Math.random() * 900000)
+                setNewProfessor((prevProfessor) => ({ ...prevProfessor, id: maxId}));
             } catch (error) {
                 console.error("Erro ao buscar Professores:", error);
             }

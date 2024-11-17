@@ -84,9 +84,9 @@ const Users = () => {
     const newUser = await response.json();
 
     setAlunos((prev) => [...prev, { ...newUser }]);
-
+    const maxId = Math.floor(100000 + Math.random() * 900000)
     setNewAluno({
-      id: 0,
+      id: maxId,
       nome: "",
       email: "",
       dataNascimento: "",
@@ -169,10 +169,7 @@ const Users = () => {
         const alunos: any[] = await response.json();
         setAlunos(alunos);
 
-        const maxId = alunos.reduce(
-          (max, aluno) => Math.max(max, Number(aluno.id)),
-          0
-        );
+        const maxId = Math.floor(100000 + Math.random() * 900000)
         setNewAluno((prevAluno) => ({ ...prevAluno, id: maxId + 1 }));
       } catch (error) {
         console.error("Erro ao buscar alunos:", error);
