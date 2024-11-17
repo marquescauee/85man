@@ -260,10 +260,10 @@ export class AlunoRepository {
   async update(usuarioId: number, alunoData: Partial<typeof alunoTable.$inferInsert> & Partial<typeof usuarioTable.$inferInsert>): Promise<Aluno | null> {
     try {
       // Atualiza o usuário
-      await this.usuarioRepo.update(usuarioId, alunoData);
+      await this.usuarioRepo.update(usuarioId, alunoData.usuario);
 
       // Atualiza o aluno
-      await db.update(alunoTable).set(alunoData).where(eq(alunoTable.usuarioId, usuarioId)).run();
+      await db.update(alunoTable).set(alunoData.aluno).where(eq(alunoTable.usuarioId, usuarioId)).run();
 
       return this.getByUsuarioId(usuarioId);
     } catch (error) {
@@ -410,10 +410,10 @@ export class ProfessorRepository {
   async update(usuarioId: number, professorData: Partial<typeof professorTable.$inferInsert> & Partial<typeof usuarioTable.$inferInsert>): Promise<Professor | null> {
     try {
       // Atualiza o usuário
-      await this.usuarioRepo.update(usuarioId, professorData);
+      await this.usuarioRepo.update(usuarioId, professorData.usuario);
 
       // Atualiza o professor
-      await db.update(professorTable).set(professorData).where(eq(professorTable.usuarioId, usuarioId)).run();
+      await db.update(professorTable).set(professorData.professor).where(eq(professorTable.usuarioId, usuarioId)).run();
 
       return this.getByUsuarioId(usuarioId);
     } catch (error) {
