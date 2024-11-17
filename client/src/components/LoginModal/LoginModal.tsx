@@ -1,52 +1,27 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 interface LoginModalProps {
   show: boolean;
   onClose: () => void;
 }
 
-const LoginModal = ({ show, onClose }: LoginModalProps) => {
+const LoginModal: React.FC<LoginModalProps> = ({ show, onClose }) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [loginError, setLoginError] = useState("");
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) {
-      setEmailError("Por favor, insira um e-mail válido.");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
   const handleLogin = () => {
-    if (!email) {
-      setLoginError("O campo e-mail é obrigatório.");
-      return;
+    if (login(email, password)) {
+      navigate("/dashboard"); // Redireciona após login bem-sucedido
+    } else {
+      setLoginError("E-mail ou senha inválidos.");
     }
-
-    if (emailError) {
-      setLoginError("Corrija o e-mail antes de prosseguir.");
-      return;
-    }
-
-    if (!password) {
-      setLoginError("O campo senha é obrigatório.");
-      return;
-    }
-
-    setLoginError("");
-    // Realizar a ação de login aqui
-    console.log("Login realizado com sucesso!");
   };
 
   return (
@@ -62,12 +37,8 @@ const LoginModal = ({ show, onClose }: LoginModalProps) => {
               type="email"
               placeholder="Digite seu e-mail"
               value={email}
-              onChange={handleEmailChange}
-              isInvalid={!!emailError}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <Form.Control.Feedback type="invalid">
-              {emailError}
-            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="password">
             <Form.Label>Senha</Form.Label>
@@ -75,7 +46,7 @@ const LoginModal = ({ show, onClose }: LoginModalProps) => {
               type="password"
               placeholder="Digite sua senha"
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Group>
         </Form>
