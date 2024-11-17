@@ -19,10 +19,10 @@ export class Usuario {
   constructor(
     id: number,
     nome: string,
+    telefone: string,
     genero: string,
     dataNascimento: string,
     celular: string,
-    telefone: string,
     email: string,
     rua: string,
     numero: string,
@@ -160,12 +160,7 @@ export class Matricula {
   dataCancelamento: Date;
   alunoId: number;
 
-  constructor(
-    id: number,
-    dataMatricula: Date,
-    dataCancelamento: Date,
-    alunoId: number
-  ) {
+  constructor(id: number, dataMatricula: Date, dataCancelamento: Date, alunoId: number) {
     this.id = id;
     this.dataMatricula = dataMatricula;
     this.dataCancelamento = dataCancelamento;
@@ -189,13 +184,7 @@ export class Atividade {
   horaInicio: Date;
   horaFim: Date;
 
-  constructor(
-    id: number,
-    nome: string,
-    descricao: string,
-    horaInicio: Date,
-    horaFim: Date
-  ) {
+  constructor(id: number, nome: string, descricao: string, horaInicio: Date, horaFim: Date) {
     this.id = id;
     this.nome = nome;
     this.descricao = descricao;
@@ -219,12 +208,7 @@ export class Produto {
   preco: number;
   quantidadeEstoque: number;
 
-  constructor(
-    id: number,
-    nome: string,
-    preco: number,
-    quantidadeEstoque: number
-  ) {
+  constructor(id: number, nome: string, preco: number, quantidadeEstoque: number) {
     this.id = id;
     this.nome = nome;
     this.preco = preco;
