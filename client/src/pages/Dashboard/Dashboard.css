@@ -49,3 +49,13 @@
   overflow-y: auto;
   color: #EBE5FC;
 }
+
+.logout-button {
+  margin-left: 12rem;
+  width: 60%;
+  background: red;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  height: 30px;
+}

@@ -3,8 +3,12 @@ import { Nav, Tab, Container } from "react-bootstrap";
 import "./Dashboard.css";
 import Users from "../../components/Users/Users";
 import Professionals from "../../components/Professionals/Professionals";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("1");
 
   const handleTabChange = (selectedTab: string | null) => {
@@ -13,12 +17,21 @@ const Dashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <Container fluid className="dashboard-container">
       <header className="dashboard-header">
         <h1 className="dashboard-title">GMV Academia</h1>
         <Tab.Container activeKey={activeTab} onSelect={handleTabChange}>
-          <Nav variant="tabs" className="dashboard-tabs">
+          <Nav
+            variant="tabs"
+            className="dashboard-tabs"
+            style={{ alignItems: "baseline" }}
+          >
             <Nav.Item>
               <Nav.Link eventKey="1">Alunos</Nav.Link>
             </Nav.Item>
@@ -36,6 +49,11 @@ const Dashboard = () => {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="6">Produtos</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <button className="logout-button" onClick={handleLogout}>
+                Sair
+              </button>
             </Nav.Item>
           </Nav>
           <main className="dashboard-body">
