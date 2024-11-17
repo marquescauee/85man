@@ -5,6 +5,7 @@ import Users from "../../components/Users/Users";
 import Professionals from "../../components/Professionals/Professionals";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import Atividades from "../../components/Atividades/Atividades";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const Dashboard = () => {
                 <Users />
               </Tab.Pane>
               <Tab.Pane eventKey="2">
-                <p>Conteúdo da aba Atividades</p>
+                <Atividades />
               </Tab.Pane>
               <Tab.Pane eventKey="3">
                 <Professionals />

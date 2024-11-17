@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import "./Professionals.css";
 import { ProfessorInsert, UsuarioInsert } from "../../../../api/src/types";
 
 interface Professor {
@@ -22,7 +21,7 @@ interface Professor {
     especialidade: string
 }
 
-const Users = () => {
+const Profissionais = () => {
     const [professores, setProfessores] = useState<Professor[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedProfessor, setSelectedProfessor] = useState<any>(null);
@@ -689,4 +688,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Profissionais;
