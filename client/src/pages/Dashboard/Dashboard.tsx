@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Nav, Tab, Container } from "react-bootstrap";
 import "./Dashboard.css";
 import Users from "../../components/Users/Users";
+import Professionals from "../../components/Professionals/Professionals";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("1");
@@ -46,7 +47,7 @@ const Dashboard = () => {
                 <p>Conteúdo da aba Atividades</p>
               </Tab.Pane>
               <Tab.Pane eventKey="3">
-                <p>Conteúdo da aba Profissionais</p>
+                <Professionals />
               </Tab.Pane>
               <Tab.Pane eventKey="4">
                 <p>Conteúdo da aba Equipamentos</p>
