@@ -304,12 +304,12 @@ export class ProfessorRepository {
   async create(professorData: typeof professorTable.$inferInsert & typeof usuarioTable.$inferInsert): Promise<Professor> {
     try {
       // Cria o usuário primeiro
-      const usuario = await this.usuarioRepo.create(professorData);
+      const usuario = await this.usuarioRepo.create(professorData.usuario);
 
       // Cria o professor vinculando ao usuário
       const professorInsertData = {
         usuarioId: usuario.id,
-        especialidade: professorData.especialidade,
+        especialidade: professorData.usuario.especialidade,
       };
       const [newProfessorData] = await db.insert(professorTable).values(professorInsertData).returning();
 
