@@ -73,7 +73,7 @@ const Users = () => {
     const response = await fetch("http://localhost:3000/alunos", {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         aluno,
@@ -81,9 +81,9 @@ const Users = () => {
       }),
     });
 
-    console.log(await response.json());
+    const newUser = await response.json();
 
-    // setAlunos((prev) => [...prev, { ...newAluno }]);
+    setAlunos((prev) => [...prev, { ...newUser }]);
 
     setNewAluno({
       id: 0,
@@ -103,17 +103,56 @@ const Users = () => {
   };
 
   // Função para editar os dados do aluno
-  const handleEditAluno = () => {
+  const handleEditAluno = async () => {
+    const aluno: AlunoInsert = {
+      ativo: selectedAluno.ativo,
+    };
+
+    const usuario: UsuarioInsert = selectedAluno;
+
+    const response = await fetch(
+      `http://localhost:3000/alunos/${selectedAluno.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          aluno,
+          usuario,
+        }),
+      }
+    );
+
+    const updatedAluno = await response.json();
+
     setAlunos((prev) =>
       prev.map((aluno) =>
-        aluno.id === selectedAluno.id ? { ...selectedAluno } : aluno
+        aluno.id === selectedAluno.id ? { ...updatedAluno } : aluno
       )
     );
     handleCloseModal();
   };
 
   // Função para remover um aluno
-  const handleRemoveAluno = () => {
+  const handleRemoveAluno = async () => {
+    const aluno: AlunoInsert = {
+      ativo: selectedAluno.ativo,
+    };
+
+    const usuario: UsuarioInsert = selectedAluno;
+
+    await fetch(`http://localhost:3000/alunos/${selectedAluno.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        aluno,
+        usuario,
+      }),
+    });
+
     setAlunos((prev) => prev.filter((aluno) => aluno.id !== selectedAluno.id));
     handleCloseModal();
   };
@@ -129,6 +168,12 @@ const Users = () => {
 
         const alunos: Aluno[] = await response.json();
         setAlunos(alunos);
+
+        const maxId = alunos.reduce(
+          (max, aluno) => Math.max(max, Number(aluno.id)),
+          0
+        );
+        setNewAluno((prevAluno) => ({ ...prevAluno, id: maxId + 1 }));
       } catch (error) {
         console.error("Erro ao buscar alunos:", error);
       }
@@ -179,8 +224,9 @@ const Users = () => {
           <Form.Group className="mb-3" controlId="formMatricula">
             <Form.Label>Código de Matrícula</Form.Label>
             <Form.Control
+              className="form-matricula"
               type="text"
-              placeholder="Digite a matrícula"
+              disabled
               value={newAluno.id}
               onChange={(e) =>
                 setNewAluno({ ...newAluno, id: Number(e.target.value) })
@@ -392,6 +438,7 @@ const Users = () => {
               <Form.Label>Código de Matrícula</Form.Label>
               <Form.Control
                 type="text"
+                className="form-matricula"
                 value={selectedAluno?.id || ""}
                 onChange={(e) =>
                   setSelectedAluno({

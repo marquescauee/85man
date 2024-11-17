@@ -17,3 +17,8 @@
 .modal-header .btn-close {
   filter: invert(100);
 }
+
+.form-matricula {
+  cursor: not-allowed;
+  background-color: #838383 !important;
+}
