@@ -166,7 +166,7 @@ const Users = () => {
           throw new Error(`Erro ao buscar alunos: ${response.statusText}`);
         }
 
-        const alunos: Aluno[] = await response.json();
+        const alunos: any[] = await response.json();
         setAlunos(alunos);
 
         const maxId = alunos.reduce(
@@ -475,10 +475,14 @@ const Users = () => {
                   }
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formGenero">
+              <Form.Group
+                className="mb-3"
+                style={{ minWidth: "100px" }}
+                controlId="formGenero"
+              >
                 <Form.Label>Gênero</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="select"
                   value={selectedAluno?.genero || ""}
                   onChange={(e) =>
                     setSelectedAluno({
@@ -486,7 +490,39 @@ const Users = () => {
                       genero: e.target.value,
                     })
                   }
-                />
+                >
+                  <option value="">Selecione o gênero</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Feminino">Feminino</option>
+                  <option value="Outro">Outro</option>
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group
+                className="mb-3"
+                style={{ minWidth: "100px" }}
+                controlId="formGenero"
+              >
+                <Form.Label>Ativo</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={
+                    selectedAluno?.ativo
+                      ? selectedAluno?.ativo === 1
+                        ? "Ativo"
+                        : "Inativo"
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setSelectedAluno({
+                      ...selectedAluno,
+                      ativo: e.target.value === "Ativo" ? 1 : 0,
+                    })
+                  }
+                >
+                  <option value="Masculino">Ativo</option>
+                  <option value="Feminino">Inativo</option>
+                </Form.Control>
               </Form.Group>
             </div>
 
