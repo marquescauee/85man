@@ -160,7 +160,12 @@ export class Matricula {
   dataCancelamento: Date;
   alunoId: number;
 
-  constructor(id: number, dataMatricula: Date, dataCancelamento: Date, alunoId: number) {
+  constructor(
+    id: number,
+    dataMatricula: Date,
+    dataCancelamento: Date,
+    alunoId: number
+  ) {
     this.id = id;
     this.dataMatricula = dataMatricula;
     this.dataCancelamento = dataCancelamento;
@@ -183,13 +188,22 @@ export class Atividade {
   descricao: string;
   horaInicio: Date;
   horaFim: Date;
+  professorId: number;
 
-  constructor(id: number, nome: string, descricao: string, horaInicio: Date, horaFim: Date) {
+  constructor(
+    id: number,
+    nome: string,
+    descricao: string,
+    horaInicio: Date,
+    horaFim: Date,
+    professorId: number
+  ) {
     this.id = id;
     this.nome = nome;
     this.descricao = descricao;
     this.horaInicio = horaInicio;
     this.horaFim = horaFim;
+    this.professorId = professorId;
   }
 
   agendar(): void {
@@ -208,7 +222,12 @@ export class Produto {
   preco: number;
   quantidadeEstoque: number;
 
-  constructor(id: number, nome: string, preco: number, quantidadeEstoque: number) {
+  constructor(
+    id: number,
+    nome: string,
+    preco: number,
+    quantidadeEstoque: number
+  ) {
     this.id = id;
     this.nome = nome;
     this.preco = preco;

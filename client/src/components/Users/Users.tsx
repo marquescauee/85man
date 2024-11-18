@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import "./Users.css";
 import { AlunoInsert, UsuarioInsert } from "../../../../api/src/types";
@@ -18,8 +18,12 @@ interface Aluno {
   bairro: string;
 }
 
-const Users = () => {
-  const [alunos, setAlunos] = useState<Aluno[]>([]);
+interface UsersProps {
+  usersData: Aluno[];
+}
+
+const Users = ({ usersData }: UsersProps) => {
+  const [alunos, setAlunos] = useState<Aluno[]>(usersData);
   const [showModal, setShowModal] = useState(false);
   const [selectedAluno, setSelectedAluno] = useState<any>(null);
   const [newAluno, setNewAluno] = useState({
@@ -84,7 +88,7 @@ const Users = () => {
     const newUser = await response.json();
 
     setAlunos((prev) => [...prev, { ...newUser }]);
-    const maxId = Math.floor(100000 + Math.random() * 900000)
+    const maxId = Math.floor(100000 + Math.random() * 900000);
     setNewAluno({
       id: maxId,
       nome: "",
@@ -157,27 +161,27 @@ const Users = () => {
     handleCloseModal();
   };
 
-  useEffect(() => {
-    const handleAlunos = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/alunos");
+  // useEffect(() => {
+  //   const handleAlunos = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3000/alunos");
 
-        if (!response.ok) {
-          throw new Error(`Erro ao buscar alunos: ${response.statusText}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`Erro ao buscar alunos: ${response.statusText}`);
+  //       }
 
-        const alunos: any[] = await response.json();
-        setAlunos(alunos);
+  //       const alunos: any[] = await response.json();
+  //       setAlunos(alunos);
 
-        const maxId = Math.floor(100000 + Math.random() * 900000)
-        setNewAluno((prevAluno) => ({ ...prevAluno, id: maxId + 1 }));
-      } catch (error) {
-        console.error("Erro ao buscar alunos:", error);
-      }
-    };
+  //       const maxId = Math.floor(100000 + Math.random() * 900000);
+  //       setNewAluno((prevAluno) => ({ ...prevAluno, id: maxId + 1 }));
+  //     } catch (error) {
+  //       console.error("Erro ao buscar alunos:", error);
+  //     }
+  //   };
 
-    handleAlunos();
-  }, []);
+  //   handleAlunos();
+  // }, []);
 
   return (
     <div style={{ display: "flex", gap: "2rem" }}>

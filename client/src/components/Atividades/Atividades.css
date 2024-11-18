@@ -1,0 +1,9 @@
+.form-cadastrar-atividade {
+  display: flex;
+  gap: 3rem;
+}
+
+.form-editar-atividade {
+  display: flex;
+  gap: 1rem;
+}
