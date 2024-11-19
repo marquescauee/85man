@@ -11,6 +11,7 @@ import { AtividadeSelect } from "../../../../api/src/types";
 import Equipamentos from "../../components/Equipamentos/Equipamentos";
 import Produtos from "../../components/Produto/Produto";
 import Vendas from "../../components/Venda/Venda";
+import Matriculas from "../../components/Matriculas/Matriculas";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -24,7 +25,8 @@ const Dashboard = () => {
   const [atividadesData, setAtividadesData] = useState(null);
   const [professionalsData, setProfessionalsData] = useState(null);
   const [equipamentosData, setEquipamentosData] = useState(null);
-  const [produtosData, setProdutosData] = useState(null); // Novo estado para produtos
+  const [produtosData, setProdutosData] = useState(null);
+  const [matriculasData, setMatriculasData] = useState(null); // Novo estado para matrículas
 
   const handleTabChange = (selectedTab: string | null) => {
     if (selectedTab) {
@@ -38,7 +40,6 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  // Função para buscar os dados
   const fetchData = async (tab: string) => {
     switch (tab) {
       case "1":
@@ -96,6 +97,23 @@ const Dashboard = () => {
           const data = await response.json();
           setProdutosData(data);
         }
+        break;
+      case "7":
+        if (!matriculasData) {
+          const response = await fetch("http://localhost:3000/matriculas");
+          const data = await response.json();
+          setMatriculasData(data);
+        }
+
+        if (!usersData) {
+          const response = await fetch("http://localhost:3000/alunos");
+          const data = await response.json();
+          setUsersData(data);
+        }
+
+        console.log(usersData);
+        console.log(matriculasData);
+
         break;
       default:
         break;
@@ -209,7 +227,14 @@ const Dashboard = () => {
               )}
               {activeTab === "7" && (
                 <div>
-                  <p>Carregando dados de Matricula</p>
+                  {matriculasData ? (
+                    <Matriculas
+                      matriculasData={matriculasData ?? []}
+                      alunosData={usersData ?? []}
+                    />
+                  ) : (
+                    <p>Carregando dados de Matrículas...</p>
+                  )}
                 </div>
               )}
             </Tab.Content>

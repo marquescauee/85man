@@ -4,7 +4,7 @@ import "./Users.css";
 import { AlunoInsert, UsuarioInsert } from "../../../../api/src/types";
 import jsPDF from "jspdf";
 
-interface Aluno {
+export interface Aluno {
   id: string;
   nome: string;
   dataNascimento: string;
