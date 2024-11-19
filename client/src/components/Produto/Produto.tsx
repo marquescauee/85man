@@ -5,8 +5,8 @@ import { jsPDF } from "jspdf";
 interface Produto {
   id?: number;
   nome: string;
-  quantidade: number;
-  precoVenda: number;
+  quantidadeEstoque: number;
+  preco: number;
 }
 
 interface ProdutosProps {
@@ -16,8 +16,8 @@ interface ProdutosProps {
 const Produtos = ({ produtosData }: ProdutosProps) => {
   const getDefaultProduto = (): Produto => ({
     nome: "",
-    quantidade: 0,
-    precoVenda: 0,
+    quantidadeEstoque: 0,
+    preco: 0,
   });
 
   const [produtos, setProdutos] = useState<Produto[]>(produtosData);
@@ -36,7 +36,7 @@ const Produtos = ({ produtosData }: ProdutosProps) => {
   };
 
   const validateProduto = (produto: Produto): boolean => {
-    if (!produto.nome || produto.quantidade <= 0 || produto.precoVenda <= 0) {
+    if (!produto.nome || produto.quantidadeEstoque <= 0 || produto.preco <= 0) {
       alert("Por favor, preencha todos os campos corretamente.");
       return false;
     }
@@ -135,7 +135,7 @@ const Produtos = ({ produtosData }: ProdutosProps) => {
     doc.setFontSize(12);
     doc.text("ID", 14, 30);
     doc.text("Nome", 40, 30);
-    doc.text("Quantidade", 100, 30);
+    doc.text("quantidadeEstoque", 100, 30);
     doc.text("Preço de Venda", 160, 30);
 
     let yOffset = 40;
@@ -149,8 +149,8 @@ const Produtos = ({ produtosData }: ProdutosProps) => {
 
       doc.text(String(produto.id), 14, yOffset);
       doc.text(produto.nome || "", 40, yOffset);
-      doc.text(String(produto.quantidade), 100, yOffset);
-      doc.text(formatCurrency(produto.precoVenda), 160, yOffset);
+      doc.text(String(produto.quantidadeEstoque), 100, yOffset);
+      doc.text(formatCurrency(produto.preco), 160, yOffset);
 
       yOffset += 10;
     });
@@ -179,8 +179,8 @@ const Produtos = ({ produtosData }: ProdutosProps) => {
               <tr key={produto.id}>
                 <td>{produto.id}</td>
                 <td>{produto.nome}</td>
-                <td>{produto.quantidade}</td>
-                <td>{formatCurrency(produto.precoVenda)}</td>
+                <td>{produto.quantidadeEstoque}</td>
+                <td>{formatCurrency(produto.preco)}</td>
                 <td>
                   <Button
                     variant="primary"
@@ -217,31 +217,31 @@ const Produtos = ({ produtosData }: ProdutosProps) => {
               }
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formQuantidade">
+          <Form.Group className="mb-3" controlId="formquantidadeEstoque">
             <Form.Label>Quantidade</Form.Label>
             <Form.Control
               type="number"
               min="1"
-              value={newProduto.quantidade}
+              value={newProduto.quantidadeEstoque}
               onChange={(e) =>
                 setNewProduto({
                   ...newProduto,
-                  quantidade: parseInt(e.target.value),
+                  quantidadeEstoque: parseInt(e.target.value),
                 })
               }
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formPrecoVenda">
+          <Form.Group className="mb-3" controlId="formpreco">
             <Form.Label>Preço de Venda</Form.Label>
             <Form.Control
               type="number"
               step="0.01"
               min="0"
-              value={newProduto.precoVenda}
+              value={newProduto.preco}
               onChange={(e) =>
                 setNewProduto({
                   ...newProduto,
-                  precoVenda: parseFloat(e.target.value),
+                  preco: parseFloat(e.target.value),
                 })
               }
             />
@@ -288,31 +288,31 @@ const Produtos = ({ produtosData }: ProdutosProps) => {
                 }
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formQuantidade">
+            <Form.Group className="mb-3" controlId="formquantidadeEstoque">
               <Form.Label>Quantidade</Form.Label>
               <Form.Control
                 type="number"
                 min="1"
-                value={selectedProduto?.quantidade || 0}
+                value={selectedProduto?.quantidadeEstoque || 0}
                 onChange={(e) =>
                   setSelectedProduto({
                     ...selectedProduto!,
-                    quantidade: parseInt(e.target.value),
+                    quantidadeEstoque: parseInt(e.target.value),
                   })
                 }
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formPrecoVenda">
+            <Form.Group className="mb-3" controlId="formpreco">
               <Form.Label>Preço de Venda</Form.Label>
               <Form.Control
                 type="number"
                 step="0.01"
                 min="0"
-                value={selectedProduto?.precoVenda || 0}
+                value={selectedProduto?.preco || 0}
                 onChange={(e) =>
                   setSelectedProduto({
                     ...selectedProduto!,
-                    precoVenda: parseFloat(e.target.value),
+                    preco: parseFloat(e.target.value),
                   })
                 }
               />
