@@ -522,7 +522,7 @@ export class MatriculaRepository {
         new Date(newMatriculaData.dataMatricula),
         newMatriculaData.dataCancelamento
           ? new Date(newMatriculaData.dataCancelamento)
-          : new Date(),
+          : null,
         newMatriculaData.alunoId
       );
     } catch (error) {

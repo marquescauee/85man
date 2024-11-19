@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Alert } from "react-bootstrap";
 import { Aluno } from "../Users/Users";
 
 interface Matricula {
@@ -53,12 +53,20 @@ const Matriculas = ({ matriculasData, alunosData }: MatriculasProps) => {
   const handleCancelMatricula = async (matriculaId: string) => {
     const dataCancelamento = new Date().toISOString();
 
+    let matricula = matriculas.find((m) => m.id === matriculaId);
+  
+    if (!matricula) {
+      alert(`500: Matricula não encontrada com o ID ${matriculaId}.`)
+    };
+
+    matricula!.dataCancelamento = dataCancelamento;
+
     const response = await fetch(
       `http://localhost:3000/matriculas/${matriculaId}`,
       {
-        method: "PATCH",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dataCancelamento }),
+        body: JSON.stringify(matricula),
       }
     );
 
