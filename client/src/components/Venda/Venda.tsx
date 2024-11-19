@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Row, Col } from "react-bootstrap";
-
-interface Produto {
-  id: number;
-  nome: string;
-  precoVenda: number;
-}
+import { ProdutoSelect as Produto } from "../../../../api/src/types";
 
 interface VendasProps {
   produtosData: Produto[];
@@ -21,7 +16,7 @@ const Venda = ({ produtosData }: VendasProps) => {
   // Calcular o total da venda
   const calcularTotalVenda = (produto: Produto, qtd: number) => {
     if (produto) {
-      return produto.precoVenda * qtd;
+      return produto.preco * qtd;
     }
     return 0;
   };
@@ -32,7 +27,7 @@ const Venda = ({ produtosData }: VendasProps) => {
     setProdutoSelecionado(produto);
     setTotalVenda(
       calcularTotalVenda(
-        produto || { id: 0, nome: "", precoVenda: 0 },
+        produto || { id: 0, nome: "", preco: 0, quantidadeEstoque: 0 },
         quantidade
       )
     );
@@ -46,17 +41,48 @@ const Venda = ({ produtosData }: VendasProps) => {
     }
   };
 
-  const handleVender = () => {
-    if (!produtoSelecionado || quantidade <= 0) {
-      alert("Selecione um produto e uma quantidade válida.");
+  const handleVender = async () => {
+    if (!produtoSelecionado) {
+      alert("Selecione um produto.");
       return;
     }
+    if (quantidade <= 0) {
+      alert("Selecione uma quantidade.");
+      return;
+    }
+    if (quantidade > produtoSelecionado.quantidadeEstoque) {
+      alert(`Quantidade ${quantidade} excede o estoque do produto ${produtoSelecionado.nome}, que tem ${produtoSelecionado.quantidadeEstoque} unidades.`);
+      return;
+    }
+    
+    const novaQuantidadeEstoque = produtoSelecionado.quantidadeEstoque - quantidade;
+
+    setProdutoSelecionado({
+      ...produtoSelecionado,
+      quantidadeEstoque: novaQuantidadeEstoque,
+    });
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/produtos/${produtoSelecionado.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(produtoSelecionado),
+        }
+      );
+
+      if (!response.ok) throw new Error("Erro ao editar produto.");
+    } catch (error) {
+      alert("Erro ao editar produto. Tente novamente.");
+      console.error(error);
+    }
+
     alert(
       `Venda realizada com sucesso! Produto: ${
         produtoSelecionado.nome
       }, Quantidade: ${quantidade}, Total: R$ ${totalVenda.toFixed(2)}`
     );
-    // Você pode adicionar a lógica para salvar a venda aqui.
   };
 
   return (
@@ -71,7 +97,7 @@ const Venda = ({ produtosData }: VendasProps) => {
                 <option value="">Selecione um produto</option>
                 {produtosData.map((produto) => (
                   <option key={produto.id} value={produto.id}>
-                    {produto.nome} - R$ {produto.precoVenda}
+                    {produto.nome} - R$ {produto.preco}
                   </option>
                 ))}
               </Form.Control>
