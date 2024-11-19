@@ -54,10 +54,10 @@ const Matriculas = ({ matriculasData, alunosData }: MatriculasProps) => {
     const dataCancelamento = new Date().toISOString();
 
     let matricula = matriculas.find((m) => m.id === matriculaId);
-  
+
     if (!matricula) {
-      alert(`500: Matricula não encontrada com o ID ${matriculaId}.`)
-    };
+      alert(`500: Matricula não encontrada com o ID ${matriculaId}.`);
+    }
 
     matricula!.dataCancelamento = dataCancelamento;
 
@@ -99,8 +99,18 @@ const Matriculas = ({ matriculasData, alunosData }: MatriculasProps) => {
                 {alunosData.find((aluno) => aluno.id === matricula.alunoId)
                   ?.nome || "Desconhecido"}
               </td>
-              <td>{matricula.dataMatricula}</td>
-              <td>{matricula.dataCancelamento || "Ativa"}</td>
+              <td>
+                {new Date(matricula.dataMatricula).toLocaleDateString("pt-BR")}
+              </td>
+              {matricula.dataCancelamento ? (
+                <td>
+                  {new Date(matricula.dataCancelamento).toLocaleDateString(
+                    "pt-BR"
+                  )}
+                </td>
+              ) : (
+                <td>Ativa</td>
+              )}
               <td>
                 <Button
                   variant="danger"
