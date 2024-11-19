@@ -3,6 +3,7 @@ import { Button, Modal, Form } from "react-bootstrap";
 import { AtividadeInsert, AtividadeSelect } from "../../../../api/src/types";
 import { Professor } from "../Professionals/Professionals";
 import "./Atividades.css";
+import jsPDF from "jspdf";
 
 interface AtividadesProps {
   atividadesData: AtividadeSelect[];
@@ -43,6 +44,30 @@ const Atividades = ({ atividadesData, professionalsData }: AtividadesProps) => {
     }
 
     return options;
+  };
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "normal");
+
+    doc.setFontSize(18);
+    doc.text("Relatório de Atividades Cadastradas", 14, 20);
+
+    doc.setFontSize(12);
+    doc.text("ID", 14, 30);
+    doc.text("Nome", 50, 30);
+    doc.text("Horário Inicial", 100, 30);
+    doc.text("Horário Final", 140, 30);
+
+    atividades.forEach((atividade, index) => {
+      const yOffset = 40 + index * 10;
+      doc.text(String(atividade.id), 14, yOffset);
+      doc.text(atividade.nome, 50, yOffset);
+      doc.text(String(atividade.horaInicio), 100, yOffset);
+      doc.text(String(atividade.horaFim), 140, yOffset);
+    });
+
+    doc.save("relatorio_atividades.pdf");
   };
 
   const handleAtividadeSelect = (atividade: AtividadeSelect) => {
@@ -201,6 +226,10 @@ const Atividades = ({ atividadesData, professionalsData }: AtividadesProps) => {
             ))}
           </tbody>
         </table>
+        {/* Button to Download PDF */}
+        <Button variant="outline-success" onClick={handleDownloadPDF}>
+          Baixar Relatório PDF
+        </Button>
       </div>
 
       {/* Formulário de Cadastro de Atividade */}

@@ -8,6 +8,9 @@ import Professionals from "../../components/Professionals/Professionals";
 import Atividades from "../../components/Atividades/Atividades";
 import { useAuth } from "../../context/AuthContext";
 import { AtividadeSelect } from "../../../../api/src/types";
+import Equipamentos from "../../components/Equipamentos/Equipamentos";
+import Produtos from "../../components/Produto/Produto";
+import Vendas from "../../components/Venda/Venda";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,6 +23,8 @@ const Dashboard = () => {
   const [usersData, setUsersData] = useState(null);
   const [atividadesData, setAtividadesData] = useState(null);
   const [professionalsData, setProfessionalsData] = useState(null);
+  const [equipamentosData, setEquipamentosData] = useState(null);
+  const [produtosData, setProdutosData] = useState(null); // Novo estado para produtos
 
   const handleTabChange = (selectedTab: string | null) => {
     if (selectedTab) {
@@ -78,6 +83,20 @@ const Dashboard = () => {
           setProfessionalsData(data);
         }
         break;
+      case "4":
+        if (!equipamentosData) {
+          const response = await fetch("http://localhost:3000/equipamentos");
+          const data = await response.json();
+          setEquipamentosData(data);
+        }
+        break;
+      case "5":
+        if (!produtosData) {
+          const response = await fetch("http://localhost:3000/produtos");
+          const data = await response.json();
+          setProdutosData(data);
+        }
+        break;
       default:
         break;
     }
@@ -115,10 +134,13 @@ const Dashboard = () => {
               <Nav.Link eventKey="4">Equipamentos</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="5">Horários</Nav.Link>
+              <Nav.Link eventKey="5">Produtos</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="6">Produtos</Nav.Link>
+              <Nav.Link eventKey="6">Vendas</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="7">Matrículas</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <button className="logout-button" onClick={handleLogout}>
@@ -158,9 +180,38 @@ const Dashboard = () => {
                   )}
                 </div>
               )}
-              {activeTab === "4" && <p>Conteúdo da aba Equipamentos</p>}
-              {activeTab === "5" && <p>Conteúdo da aba Horários</p>}
-              {activeTab === "6" && <p>Conteúdo da aba Produtos</p>}
+              {activeTab === "4" && (
+                <div>
+                  {equipamentosData ? (
+                    <Equipamentos equipamentosData={equipamentosData} />
+                  ) : (
+                    <p>Carregando dados de Equipamentos...</p>
+                  )}
+                </div>
+              )}
+              {activeTab === "5" && (
+                <div>
+                  {produtosData ? (
+                    <Produtos produtosData={produtosData} />
+                  ) : (
+                    <p>Carregando dados de Produtos...</p>
+                  )}
+                </div>
+              )}
+              {activeTab === "6" && (
+                <div>
+                  {produtosData ? (
+                    <Vendas produtosData={produtosData} />
+                  ) : (
+                    <p>Carregando dados de Produtos...</p>
+                  )}
+                </div>
+              )}
+              {activeTab === "7" && (
+                <div>
+                  <p>Carregando dados de Matricula</p>
+                </div>
+              )}
             </Tab.Content>
           </main>
         </Tab.Container>

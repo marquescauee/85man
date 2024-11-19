@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { ProfessorInsert, UsuarioInsert } from "../../../../api/src/types";
+import { jsPDF } from "jspdf";
 
 export interface Professor {
   id: number;
@@ -59,6 +60,70 @@ const Profissionais = ({ professionalsData }: ProfissionaisProps) => {
     if (!date) return "";
     const [year, month, day] = date.split("-");
     return `${day}/${month}/${year}`; // Formato para salvar
+  };
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "normal");
+
+    // Título
+    doc.setFontSize(18);
+    doc.text("Relatório de Professores Cadastrados", 14, 20);
+
+    // Cabeçalhos das colunas
+    doc.setFontSize(12);
+    doc.text("ID", 14, 30);
+    doc.text("Nome", 40, 30);
+    doc.text("Especialidade", 100, 30);
+    doc.text("Telefone", 160, 30);
+    doc.text("Gênero", 210, 30);
+    doc.text("Data Nascimento", 250, 30);
+    doc.text("Celular", 280, 30);
+    doc.text("Email", 320, 30);
+    doc.text("Rua", 360, 30);
+    doc.text("Número", 400, 30);
+    doc.text("Complemento", 440, 30);
+    doc.text("Bairro", 480, 30);
+    doc.text("Cidade", 520, 30);
+    doc.text("Estado", 560, 30);
+    doc.text("CEP", 600, 30);
+    doc.text("País", 640, 30);
+
+    const maxLinesPerPage = 25; // Número máximo de linhas por página
+    let yOffset = 40; // Posição inicial no eixo Y
+
+    // Iterar sobre os professores cadastrados
+    professionalsData.forEach((professor, index) => {
+      // Verificar se a página está cheia
+      if (index > 0 && index % maxLinesPerPage === 0) {
+        doc.addPage(); // Adiciona uma nova página
+        yOffset = 20; // Redefine o yOffset após adicionar uma nova página
+      }
+
+      // Adiciona os dados do professor
+      doc.text(String(professor.id), 14, yOffset);
+      doc.text(professor.nome, 40, yOffset);
+      doc.text(professor.especialidade, 100, yOffset);
+      doc.text(professor.telefone, 160, yOffset);
+      doc.text(professor.genero, 210, yOffset);
+      doc.text(professor.dataNascimento, 250, yOffset);
+      doc.text(professor.celular, 280, yOffset);
+      doc.text(professor.email, 320, yOffset);
+      doc.text(professor.rua, 360, yOffset);
+      doc.text(professor.numero, 400, yOffset);
+      doc.text(professor.complemento, 440, yOffset);
+      doc.text(professor.bairro, 480, yOffset);
+      doc.text(professor.cidade, 520, yOffset);
+      doc.text(professor.estado, 560, yOffset);
+      doc.text(professor.cep, 600, yOffset);
+      doc.text(professor.pais, 640, yOffset);
+
+      // Atualiza o yOffset para a próxima linha
+      yOffset += 10;
+    });
+
+    // Salvando o PDF
+    doc.save("relatorio_professores.pdf");
   };
 
   // Função para abrir o modal com os dados do professor selecionado
@@ -229,6 +294,10 @@ const Profissionais = ({ professionalsData }: ProfissionaisProps) => {
             ))}
           </tbody>
         </table>
+        {/* Button to Download PDF */}
+        <Button variant="outline-success" onClick={handleDownloadPDF}>
+          Baixar Relatório PDF
+        </Button>
       </div>
 
       {/* Formulário de Cadastro de Professor */}

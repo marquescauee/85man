@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import "./Users.css";
 import { AlunoInsert, UsuarioInsert } from "../../../../api/src/types";
+import jsPDF from "jspdf";
 
 interface Aluno {
   id: string;
@@ -161,6 +162,33 @@ const Users = ({ usersData }: UsersProps) => {
     handleCloseModal();
   };
 
+  // Function to generate and download the PDF report
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "normal");
+
+    // Adding title
+    doc.setFontSize(18);
+    doc.text("Relatório de Alunos Cadastrados", 14, 20);
+
+    // Setting column headers
+    doc.setFontSize(12);
+    doc.text("Matrícula", 14, 30);
+    doc.text("Nome", 50, 30);
+    doc.text("Data Nascimento", 100, 30);
+
+    // Adding data rows
+    alunos.forEach((aluno, index) => {
+      const yOffset = 40 + index * 10;
+      doc.text(String(aluno.id), 14, yOffset);
+      doc.text(aluno.nome, 50, yOffset);
+      doc.text(aluno.dataNascimento, 100, yOffset);
+    });
+
+    // Download the PDF
+    doc.save("relatorio_alunos.pdf");
+  };
+
   // useEffect(() => {
   //   const handleAlunos = async () => {
   //     try {
@@ -213,6 +241,11 @@ const Users = ({ usersData }: UsersProps) => {
             ))}
           </tbody>
         </table>
+
+        {/* Button to Download PDF */}
+        <Button variant="outline-success" onClick={handleDownloadPDF}>
+          Baixar Relatório PDF
+        </Button>
       </div>
 
       {/* Formulário de Cadastro de Aluno */}
