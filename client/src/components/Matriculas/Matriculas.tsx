@@ -114,6 +114,7 @@ const Matriculas = ({ matriculasData, alunosData }: MatriculasProps) => {
               <td>
                 <Button
                   variant="danger"
+                  disabled={!!matricula.dataCancelamento}
                   onClick={() => handleCancelMatricula(matricula.id)}
                 >
                   Cancelar
